@@ -19,5 +19,5 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 #Put your website URL
-define("PORTAL", "https://workspace.intelhost.com.my/workspace/HeryFrameworkV3/");
+define("PORTAL", "https://web-url-here.com/");
 ?>
