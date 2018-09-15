@@ -9,13 +9,13 @@ spl_autoload_register(function($class){
 			include_once(dirname(__DIR__) . "/Core/" . $ar[0] . ".php");
 		}
 	}else{
-		$path = dirname(__DIR__) . "/App";
+		$path = dirname(__DIR__) . "/Core";
 		foreach($ar as $a){
 			$path .= "/" . $a;
 		}
 		$path .= ".php";
 		
-		if(is_file($path)){
+		if(file_exists($path)){
 			include_once($path);
 		}
 	}
@@ -27,7 +27,7 @@ spl_autoload_register(function($class){
 		include_once($path);
 	}
 });
-
+/*
 spl_autoload_register(function($class){
 	if(!class_exists($class)){
 		$c = "class {$class} {";
@@ -35,6 +35,6 @@ spl_autoload_register(function($class){
 		$c .= "}";
 		eval($c);
 	}
-});
+});*/
 
 ?>
