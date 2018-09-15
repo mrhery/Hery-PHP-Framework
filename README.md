@@ -1,5 +1,5 @@
 # Hery PHP Framework (HPF) version 3
-HPF is a small PHP Framework to develop a web with routing page, modelling class from database (etc.) easier. This version 3 is 70% are taken from version 2.
+HPF is a small PHP Framework to develop a web with routing page, modelling class from database (etc.) easier. 70% of this version are taken from version 2.
 
 # Where to Start?
 
