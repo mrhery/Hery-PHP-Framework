@@ -286,6 +286,10 @@ The `Input` class used to grab the requested data either `$_POST` or `$_GET` met
 //Input::get() will return string.
 ```
 
+The `Input` class are recommended to use in fetching request data as it can avoid the *Cross Site Scripting (XSS)* attack.
+
+## End Of Documents
+This document are not well-ly finnished as it's not describe the whole structure. But this can be the basic start to using this framework. The next documents will be the `Page` class on detail, `F` class on detail, `Curl` class, `Alert`, `Packer`, `Loader` and other new upcoming features like PHP socket, AES-256 CBC Encryption and so on.
 
 
 
