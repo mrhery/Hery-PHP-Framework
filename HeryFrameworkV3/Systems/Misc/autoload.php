@@ -27,7 +27,7 @@ spl_autoload_register(function($class){
 		include_once($path);
 	}
 });
-/*
+
 spl_autoload_register(function($class){
 	if(!class_exists($class)){
 		$c = "class {$class} {";
@@ -35,6 +35,6 @@ spl_autoload_register(function($class){
 		$c .= "}";
 		eval($c);
 	}
-});*/
+});
 
 ?>
