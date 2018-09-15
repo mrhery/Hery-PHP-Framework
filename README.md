@@ -115,7 +115,7 @@ switch($main) //default
 To make development easier, the `$page` can be instantiate outside the `switch` code block as below:
 ```
 $page = new Page();
-$page->setMetaTag('
+$page->setMetaTop('
       <meta charset="UTF-8" />
     ');
 switch($main) //default
