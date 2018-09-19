@@ -55,10 +55,12 @@ class DB{
 		
 		$sql = "UPDATE {$table} SET {$set} WHERE {$where}";
 		if($this->query($sql, $fields)){
-			return true;
+			$this->_error = false;
 		}else{
-			return false;
+			$this->_error = true;
 		}
+		
+		return $this;
 	}
 	
 	public function insert($table, $fields = array()){
@@ -78,10 +80,13 @@ class DB{
 			$sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES({$values})";
 			
 			if($this->query($sql, $fields)){
-				return true;
+				$this->_error = false;
 			}
+		}else{
+			$this->_error = true;
 		}
-		return false;
+		
+		return $this;
 	}
 	
 	public function del($table, $column, $data){
@@ -95,48 +100,6 @@ class DB{
 		}else{
 			return false;
 		}
-	}
-	
-	public function settingInfo(){
-		$this->_error = false;
-		$sql = "SELECT * FROM settings";
-		if($this->_query = $this->_pdo->prepare($sql)){
-			if($this->_query->execute()){
-				$this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
-				return $this->_results;
-			}else{
-				$this->_error = false;
-			}
-		}else{
-			echo "Error Preparing the statement.";
-		}
-	}
-	
-	public function getData($data, $table, $column){
-		$sql = "SELECT * FROM " . $table . " WHERE " . $column . " = " . $data;
-		if($this->_query = $this->_pdo->prepare($sql)){
-			if($this->_query->execute()){
-				$this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
-				return $this->_results;
-			}else{
-				$this->_error = false;
-			}
-		}else{
-			$this->_error = true;
-		}
-	}
-	
-	public function isDuplicate($data, $table, $column){
-		$sql = "SELECT * FROM {$table} WHERE {$column} = {$data}";
-		if($this->_query = $this->_pdo->prepare($sql)){
-			if($this->_query->execute()){
-				$this->_count = $this->_query->rowCount();
-				return $this;
-			}
-		}else{
-			$this->_error = true;
-		}
-		return $this;
 	}
 	
 	public function q($sql){
