@@ -39,12 +39,25 @@ trait Modelv2{
 		
 		$x = DB::conn()->q($sql);
 		
-		return $x->results();
+		$datas = [];
+		foreach($x->results() as $values){
+			$data = (object)[];
+			foreach($values as $key => $value){
+				$data->{$key} = call_user_func(function($val){
+					return F::StringChar($val);
+				}, $value);
+			}
+			
+			$datas[] = $data;
+		}
+		
+		return $datas;
 	}
 	
-	public static function getBy($column){
+	public static function getBy($column, $setting = []){
 		$sql = "SELECT * FROM " . self::$table . " WHERE";
-	
+	    $s = false;
+	    
 		$i = 0;
 		foreach($column as $key => $value){
 			if($i == 0){
@@ -56,9 +69,39 @@ trait Modelv2{
 			$i++;
 		}
 		
+		foreach($setting as $key => $value){
+		    switch($key){
+		        case "order":
+		            $sql .= " ORDER BY " . $value;    
+		        break;
+		        
+		        case "limit":
+		            $sql .= " LIMIT " . $value;
+		        break;
+		    }
+		}
+		
 		$x = DB::conn()->query($sql, $column);
 		
-		return $x->results();
+		if($s){
+			$datas = [];
+			foreach($x->results() as $values){
+				$data = (object)[];
+				foreach($values as $key => $value){
+					$data->{$key} = call_user_func(function($val){
+						return F::StringChar($val);
+					}, $value);
+				}
+				
+				$datas[] = $data;
+			}
+			
+			return $datas;
+		}else{
+			return $x->results();
+		}
+		/**/
+		
 	}
 	
 	public static function insertInto($data){
@@ -67,7 +110,7 @@ trait Modelv2{
 		return ($x->error() ? false : true);
 	}
 	
-	public function deleteBy($data){
+	public static function deleteBy($data){
 		$sql = "DELETE FROM " . self::$table . " WHERE";
 		
 		$i = 0;

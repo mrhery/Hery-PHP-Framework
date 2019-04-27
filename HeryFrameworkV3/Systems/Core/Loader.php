@@ -33,6 +33,10 @@ class Loader{
 					case "js":
 						header("Content-Type: application/javascript");
 					break;
+					
+					default:
+						header("Content-Type: " . mime_content_type($path));
+					break;
 				}
 				
 				$o = fopen($path, "r");

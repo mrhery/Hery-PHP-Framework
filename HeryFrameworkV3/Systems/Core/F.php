@@ -42,6 +42,10 @@ class F{
 		return $url;
 	}
 	
+	public static function StringChar($str){
+		return htmlspecialchars($str);
+	}
+	
 	public static function Encode64($string){
 		return base64_encode($string);
 	}
@@ -63,25 +67,6 @@ class F{
 	
 	public static function UniqKey($prefix = ""){
 		return $prefix . uniqid();
-	}
-	
-	public static function NewReqKey(){
-		$_SESSION["IR"] = F::Encrypt("cc" . uniqid());
-	}
-	
-	public static function BackURL($page = "", $view = ""){
-		if(isset($_SERVER["HTTP_REFERER"])){
-			$url = $_SERVER["HTTP_REFERER"];
-		}else{
-			$url = "index.php";
-			if(!empty($page)){
-				$url .= "?page=" . $page;
-				if(!empty($view)){
-					$url .= "&view=" . $view;
-				}
-			}
-		}
-		return $url;
 	}
 	
 	public static function GetDate($time = 0, $full = false){
@@ -123,10 +108,6 @@ class F{
 		return $x;
 	}
 	
-	public static function HTMLChars($string){
-		return htmlspecialchars($string);
-	}
-	
 	public static function TrimWord($string, $limit){
 		if (strlen($string) > $limit){
 			$string = substr($string, 0, $limit) . ' ...';
@@ -142,49 +123,6 @@ class F{
             }
         }
         return null;
-    }
-    
-    public static function ResponsiveIFrame($string, $default_size = ""){
-    	$a = str_replace('width="'. $default_size . '"', 'width="100%" class="contactmap"', $string );
-		$a = str_replace('width="640"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="100"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="200"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="300"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="400"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="500"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="600"', 'width="100%" class="contactmap"', $a );
-		return $a;
-    }
-    
-    public static function GetRefererData($_url) { 
-        if(!empty($_url)){
-	        $p = $q = "";
-	        $chunk_url = parse_url($_url); 
-	        $_data["host"] = ($chunk_url['host']) ? $chunk_url['host'] : ''; 
-	        if(isset($chunk_url['query'])){
-				parse_str($chunk_url['query']); 
-			}
-	        $_data["keyword"] = ($p) ? $p: (($q) ? $q : '' ); 
-	        return $_data; 
-        }else{
-        	return (string)"";
-        }
-    }
-    
-    public static function GetRemoteIP(){
-    	$x = $_SERVER["REMOTE_ADDR"];
-    	
-    	return $x;
-    }
-    
-    public static function GetRefererURL(){
-    	if(isset($_SERVER["HTTP_REFERER"])){
-    		$x = $_SERVER["HTTP_REFERER"];
-    	}else{
-    		$x = "";
-    	}
-    	
-    	return $x;
     }
     
     public static function String($string){

@@ -1,8 +1,8 @@
 <?php
-#Load Misc File & Addon
 require_once(__DIR__ . "/Misc/document_access.php");
-require_once(__DIR__ . "/Misc/autoload.php");
 require_once(__DIR__ . "/Misc/session.php");
+require_once(__DIR__ . "/Misc/asset_loader.php");
+
 
 #Database connection information.
 #Has been tested and developed on MySQL
@@ -19,5 +19,6 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 #Put your website URL
-define("PORTAL", "https://web-url-here.com/");
+define("PORTAL", "http://localhost/");
+
 ?>
