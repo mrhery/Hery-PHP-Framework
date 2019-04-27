@@ -13,7 +13,7 @@ class App{
 			@mkdir(APPS . $code . "/View/", 0777, true);
 			$o = fopen(APPS . $code . "/configure.php", "w+");
 			fwrite($o, <<<'T'
-
+<?php
 class Config{
 	public static $host 	= "127.0.0.1";
 	public static $database	= "";
@@ -53,9 +53,9 @@ T
 	}
 	
 	public function run(){
-		define("X", "asd");
+		//define("ROUTE", $this->route);
+		include_once(APPS . $this->code . "/configure.php");
 		include_once(APPS . $this->code . "/App.php");
-		
 		
 		is_callable($this->body) ? call_user_func($this->body) : "";
 	}

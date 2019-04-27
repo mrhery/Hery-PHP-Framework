@@ -13,13 +13,13 @@ session_start();
 /*#*/ define("ASSET", SYSTEM . "Assets/"); 		  #
 /*#*/ define("UPLOAD", ASSET . "medias/"); 		  #
 /*#*/ define("CLASSES", SYSTEM . "Apps/Classes/"); #
-/*#*/ define("ROUTE", Input::get("route")); 	  #
 /*#*/ define("DEF_NAME", "Developed with HPF");	  #
 ###################################################
 
-#Database Configuration
-require_once(__DIR__ . "/configure.php");
+define("ROUTE", Input::get("route"));
+
+require_once(__DIR__ . "/setup.php");
 
 #Web Application
-require_once(__DIR__ . "/Apps/App.php");
+require_once(__DIR__ . "/Apps/Apps.php");
 ?>
