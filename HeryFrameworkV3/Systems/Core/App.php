@@ -7,6 +7,8 @@ class App{
 		$this->code = $code;
 		$this->route = Input::get("route");
 		
+		define("APP_CODE", $this->code);
+		
 		if(!is_dir(APPS . $code)){
 			@mkdir(APPS . $code . "/Classes", 0777, true);
 			@mkdir(APPS . $code . "/Controller", 0777, true);

@@ -54,14 +54,17 @@ class Page{
 			$this->route = $route;
 		}
 		
-		$path = dirname(__DIR__) . "/App/View/pages/" . $page . ".php";
+		$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $page . ".php";
 		
-		if(!is_file($path)){
-			$o = fopen($path, "w");
-			fclose($o);
-		}
-		
-		array_push($this->page, $path);
+		if(is_dir(dirname($path))){
+			
+			if(!is_file($path)){
+				$o = fopen($path, "w");
+				fclose($o);
+			}
+			
+			array_push($this->page, $path);
+		}		
 	}
 	
 	public function setBodyAttribute($attr = ""){
@@ -97,7 +100,7 @@ class Page{
 		echo $header;
 		
 		if(!empty($this->main_menu)){
-			$path = dirname(__DIR__) . "/App/View/" . $this->main_menu;
+			$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $this->main_menu;
 			if(file_exists($path)){
 				include_once($path);
 			}
@@ -105,7 +108,7 @@ class Page{
 		
 		if(!empty($this->breadcumb)){
 			
-			$path = dirname(__DIR__) . "/App/View/" . $this->breadcumb;
+			$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $this->breadcumb;
 			if(file_exists($path)){
 				include_once($path);
 			}
@@ -120,7 +123,7 @@ class Page{
 		}
 		
 		if(!empty($this->footer)){
-			$path = dirname(__DIR__) . "/App/View/" . $this->footer;
+			$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $this->footer;
 			if(file_exists($path)){
 				include_once($path);
 			}
@@ -130,7 +133,7 @@ class Page{
 	}
 	
 	public function Read($type = "header"){
-		$path = dirname(__DIR__) . "/Apps/View/skeleton/" . $type . ".php";
+		$path = dirname(__DIR__) . "/Apps/Public/View/skeleton/" . $type . ".php";
 		$x = fopen($path, "r+");
 		$string = stream_get_contents($x);
 		
