@@ -14,7 +14,7 @@ class Controller{
 	}
 	
 	public function Execute($path, $route = ""){
-		$path = dirname(__DIR__) . "/App/Controller/" . $path . ".php";
+		$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/Controller/" . $path . ".php";
 		
 		if(file_exists($path)){
 			include_once($path);
