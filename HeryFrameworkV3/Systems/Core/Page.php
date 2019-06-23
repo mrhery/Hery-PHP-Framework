@@ -141,10 +141,10 @@ class Page{
 	}
 	
 	public static function Load($path, $route = ""){
-		if(file_exists(PAGES . $path . ".php")){
-			include_once(PAGES . $path . ".php");
+		if(file_exists(dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $path . ".php")){
+			include_once(dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $path . ".php");
 		}else{
-			die("file " . PAGES . $path . " not found");
+			die("file " . dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $path . " not found");
 		}
 	}
 }
