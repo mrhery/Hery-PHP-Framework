@@ -7,12 +7,9 @@ session_start();
 ###################DO NOT EDIT BELOW###############
 ###################################################
 /*#*/ define("SYSTEM", __DIR__ . "/");	   		  #
+/*#*/ define("MISC", __DIR__ . "/Misc/");	   	  #
+/*#*/ define("CORE", __DIR__ . "/Core/");	   	  #
 /*#*/ define("APPS", SYSTEM . "Apps/");	   		  #
-/*#*/ define("VIEW", SYSTEM . "Apps/View/");		  #
-/*#*/ define("PAGES", VIEW . "pages/");    		  #
-/*#*/ define("ASSET", SYSTEM . "Assets/"); 		  #
-/*#*/ define("UPLOAD", ASSET . "medias/"); 		  #
-/*#*/ define("CLASSES", SYSTEM . "Apps/Classes/"); #
 /*#*/ define("DEF_NAME", "Developed with HPF");	  #
 ###################################################
 
@@ -22,4 +19,5 @@ require_once(__DIR__ . "/setup.php");
 
 #Web Application
 require_once(__DIR__ . "/Apps/Apps.php");
-?>
+
+

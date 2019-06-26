@@ -19,7 +19,7 @@ class Loader{
 	}
 	
 	public static function Asset($path = ""){
-		$path = dirname(__DIR__) . "/Assets/" . $path;
+		$path = ASSET . $path;
 		
 		if(!is_dir($path)){
 			if(file_exists($path)){

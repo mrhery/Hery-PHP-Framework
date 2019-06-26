@@ -54,7 +54,7 @@ class Page{
 			$this->route = $route;
 		}
 		
-		$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $page . ".php";
+		$path = VIEW . $page . ".php";
 		
 		if(is_dir(dirname($path))){
 			
@@ -96,11 +96,10 @@ class Page{
 		}
 		$footer = str_replace("{BOTTOM_TAG}", $bottom, $footer);
 		
-		//header("Content-Type: " . $this->contentType);
 		echo $header;
 		
 		if(!empty($this->main_menu)){
-			$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $this->main_menu;
+			$path = VIEW . $this->main_menu;
 			if(file_exists($path)){
 				include_once($path);
 			}
@@ -108,7 +107,7 @@ class Page{
 		
 		if(!empty($this->breadcumb)){
 			
-			$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $this->breadcumb;
+			$path = VIEW . $this->breadcumb;
 			if(file_exists($path)){
 				include_once($path);
 			}
@@ -123,7 +122,7 @@ class Page{
 		}
 		
 		if(!empty($this->footer)){
-			$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $this->footer;
+			$path = VIEW . $this->footer;
 			if(file_exists($path)){
 				include_once($path);
 			}
@@ -133,7 +132,7 @@ class Page{
 	}
 	
 	public function Read($type = "header"){
-		$path = dirname(__DIR__) . "/Apps/Public/View/skeleton/" . $type . ".php";
+		$path = MISC . "skeleton/" . $type . ".php";
 		$x = fopen($path, "r+");
 		$string = stream_get_contents($x);
 		
@@ -141,10 +140,10 @@ class Page{
 	}
 	
 	public static function Load($path, $route = ""){
-		if(file_exists(dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $path . ".php")){
-			include_once(dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $path . ".php");
+		if(file_exists(VIEW . $path . ".php")){
+			include_once(VIEW . $path . ".php");
 		}else{
-			die("file " . dirname(__DIR__) . "/Apps/". APP_CODE ."/View/" . $path . " not found");
+			die("file " . VIEW . $path . " not found");
 		}
 	}
 }

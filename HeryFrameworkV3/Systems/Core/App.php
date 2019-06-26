@@ -8,14 +8,23 @@ class App{
 		$this->route = Input::get("route");
 		
 		define("APP_CODE", $this->code);
+		define("APP", APPS . APP_CODE . "/");
+		define("VIEW", APP . "View/");
+		define("CLASSES", APP . "Classes/");
+		define("ASSET", APP . "Assets/");
 		
 		if(!is_dir(APPS . $code)){
 			@mkdir(APPS . $code . "/Classes", 0777, true);
 			@mkdir(APPS . $code . "/Controller", 0777, true);
 			@mkdir(APPS . $code . "/View/", 0777, true);
+			@mkdir(APPS . $code . "/Assets/", 0777, true);
 			$o = fopen(APPS . $code . "/configure.php", "w+");
 			fwrite($o, <<<'T'
 <?php
+#Misc Files
+include_once(MISC . "asset_loader.php");
+
+#Database Configuration
 class Config{
 	public static $host 	= "127.0.0.1";
 	public static $database	= "";
@@ -23,6 +32,8 @@ class Config{
 	public static $password	= "";
 }
 
+#Define your web application URL
+define("PORTAL", "http://localhost/");
 T
 );
 			fclose($o);
