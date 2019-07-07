@@ -11,4 +11,4 @@ class Config{
 }
 
 #Define your web application URL
-define("PORTAL", "http://localhost/");
+define("PORTAL", "http://localhost/Hery-PHP-Framework-v3/HeryFrameworkV3/");

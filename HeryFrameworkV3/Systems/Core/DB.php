@@ -5,17 +5,26 @@ class DB{
 	private static $_instance = null;
 	private $_pdo, $_query, $_error = false, $_results, $_count = 0;
 	
-	private function __construct(){
+	private function __construct($conn = []){
+		if(count($conn) < 4){
+			$conn = [
+				"host"		=> Config::$host,
+				"username"	=> Config::$username,
+				"password"	=> Config::$password,
+				"database"	=> Config::$database
+			];
+		}
+		
 		try{
-			$this->_pdo = new PDO("mysql:host=" . Config::$host . "; dbname=" . Config::$database, Config::$username, Config::$password);
+			$this->_pdo = new PDO("mysql:host=" . $conn["host"] . "; dbname=" . $conn["database"], $conn["username"], $conn["password"]);
 		}catch(PDOException $ex){
 			die($ex->getMessage());
 		}
 	}
 	
-	public static function conn(){
+	public static function conn($conn = []){
 		if(!isset(self::$_instance)){
-			self::$_instance = new DB();
+			self::$_instance = new DB($conn);
 		}
 		return self::$_instance;
 	}
@@ -127,7 +136,4 @@ class DB{
 	public function count(){
 		return $this->_count;
 	}
-	
 }
-
-?>

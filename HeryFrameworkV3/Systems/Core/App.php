@@ -8,6 +8,7 @@ class App{
 		$this->route = Input::get("route");
 		
 		define("APP_CODE", $this->code);
+		define("APP_NAME", $this->name);
 		define("APP", APPS . APP_CODE . "/");
 		define("VIEW", APP . "View/");
 		define("CLASSES", APP . "Classes/");
