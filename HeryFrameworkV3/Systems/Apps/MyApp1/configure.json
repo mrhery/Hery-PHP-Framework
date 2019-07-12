@@ -2,14 +2,14 @@
 	"databases": [
 		{
 			"host": "127.0.0.1",
-			"database": "cf",
-			"username": "root",
+			"database": "",
+			"username": "",
 			"password": ""
 		}
 	],
 	"constants": [
 		{
-			"PORTAL": 	"http://localhost/"
+			"PORTAL": 	"http://localhost/from1"
 		}
 	],
 	"miscs": [

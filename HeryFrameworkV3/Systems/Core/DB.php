@@ -6,13 +6,16 @@ class DB{
 	private $_pdo, $_query, $_error = false, $_results, $_count = 0;
 	
 	private function __construct($conn = []){
-		if(count($conn) < 4){
-			$conn = [
-				"host"		=> Config::$host,
-				"username"	=> Config::$username,
-				"password"	=> Config::$password,
-				"database"	=> Config::$database
-			];
+		if(is_int($conn)){
+			if(isset(self::database()[$conn])){
+				$conn = self::database()[$conn];
+			}else{
+				$conn = count(self::database()) > 0 ? self::database()[0] : [];
+			}
+		}else{
+			if(count($conn) < 4){
+				$conn = count(self::database()) > 0 ? self::database()[0] : [];
+			}
 		}
 		
 		try{
@@ -124,6 +127,26 @@ class DB{
 		return $this;
 	}
 	
+	public static function database(){
+		$array = [];
+		if(file_exists(APPS . APP_CODE. "/configure.json")){
+			$json = file_get_contents(APPS . APP_CODE . "/configure.json");
+			$obj = json_decode($json);
+			
+			if(isset($obj->databases)){
+				foreach($obj->databases as $db){
+					$array[] = [
+						"database"	=> $db->database,
+						"username"	=> $db->username,
+						"password"	=> $db->password,
+						"host"		=> $db->host
+					];
+				}
+			}
+		}
+		
+		return $array;
+	}
 	
 	public function results(){
 		return $this->_results;

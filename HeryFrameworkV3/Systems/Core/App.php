@@ -57,6 +57,14 @@ class App{
 			$o = fopen(APPS . $this->code . "/configure.json", "w+");
 			fwrite($o, <<<'T'
 {
+	"databases": [
+		{
+			"host": "127.0.0.1",
+			"database": "",
+			"username": "",
+			"password": ""
+		}
+	],
 	"constants": [
 		{
 			"PORTAL": 	"http://localhost/"
