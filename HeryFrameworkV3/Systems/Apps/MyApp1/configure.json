@@ -9,7 +9,7 @@
 	],
 	"constants": [
 		{
-			"PORTAL": 	"http://localhost/from1"
+			"PORTAL": 	"http://localhost/"
 		}
 	],
 	"miscs": [
