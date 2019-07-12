@@ -7,47 +7,7 @@ class App{
 		$this->code = $code;
 		$this->route = Input::get("route");
 		
-		define("APP_CODE", $this->code);
-		define("APP_NAME", $this->name);
-		define("APP", APPS . APP_CODE . "/");
-		define("VIEW", APP . "View/");
-		define("CLASSES", APP . "Classes/");
-		define("ASSET", APP . "Assets/");
 		
-		if(!is_dir(APPS . $code)){
-			@mkdir(APPS . $code . "/Classes", 0777, true);
-			@mkdir(APPS . $code . "/Controller", 0777, true);
-			@mkdir(APPS . $code . "/View/", 0777, true);
-			@mkdir(APPS . $code . "/Assets/", 0777, true);
-			$o = fopen(APPS . $code . "/configure.php", "w+");
-			fwrite($o, <<<'T'
-<?php
-#Misc Files
-include_once(MISC . "asset_loader.php");
-
-#Database Configuration
-class Config{
-	public static $host 	= "127.0.0.1";
-	public static $database	= "";
-	public static $username	= "";
-	public static $password	= "";
-}
-
-#Define your web application URL
-define("PORTAL", "http://localhost/");
-T
-);
-			fclose($o);
-			
-			$o = fopen(APPS . $code . "/App.php", "w+");
-			fwrite($o, <<<'T'
-<?php
-//A journey start with a step
-
-T
-);
-			fclose($o);
-		}
 	}
 	
 	public function name($name = ""){
@@ -66,11 +26,88 @@ T
 		$this->body = $body;
 	}
 	
-	public function run(){
-		//define("ROUTE", $this->route);
-		include_once(APPS . $this->code . "/configure.php");
-		include_once(APPS . $this->code . "/App.php");
+	public function run(){		
+		define("APP_CODE", $this->code);
+		define("APP_NAME", $this->name);
+		define("APP", APPS . APP_CODE . "/");
+		define("VIEW", APP . "View/");
+		define("CLASSES", APP . "Classes/");
+		define("ASSET", APP . "Assets/");
 		
+		if(!is_dir(APPS . $this->code)){
+			@mkdir(APPS . $this->code . "/Classes", 0777, true);
+			@mkdir(APPS . $this->code . "/Controller", 0777, true);
+			@mkdir(APPS . $this->code . "/View/", 0777, true);
+			@mkdir(APPS . $this->code . "/Assets/", 0777, true);
+			// $o = fopen(APPS . $this->code . "/database.php", "w+");
+			// fwrite($o, <<<'T'
+// <?php
+// #Database Configuration
+// class Config{
+	// public static $host 	= "127.0.0.1";
+	// public static $database	= "";
+	// public static $username	= "";
+	// public static $password	= "";
+// }
+
+// T
+// );
+			// fclose($o);
+			
+			$o = fopen(APPS . $this->code . "/configure.json", "w+");
+			fwrite($o, <<<'T'
+{
+	"constants": [
+		{
+			"PORTAL": 	"http://localhost/"
+		}
+	],
+	"miscs": [
+		"asset_loader.php"
+	],
+	"headers": []
+}
+T
+);
+			fclose($o);
+			
+			$o = fopen(APPS . $this->code . "/App.php", "w+");
+			fwrite($o, <<<'T'
+<?php
+//A journey start with a step
+
+T
+);
+			fclose($o);
+		}
+		
+		if(file_exists(APPS . $this->code . "/configure.json")){
+			$json = file_get_contents(APPS . $this->code . "/configure.json");
+			$obj = json_decode($json);
+			
+			if(isset($obj->miscs)){
+				foreach($obj->miscs as $misc){
+					include_once(MISC . $misc);
+				}
+			}
+			
+			if(isset($obj->constants)){
+				foreach($obj->constants as $value){
+					$value = (array)$value;
+					if(!defined(key($value))){
+						define(key($value), $value[key($value)]);
+					}
+				}
+			}
+			
+			if(isset($obj->headers)){
+				foreach($obj->headers as $header){
+					header($header);
+				}
+			}
+		}
+		
+		include_once(APPS . $this->code . "/App.php");
 		is_callable($this->body) ? call_user_func($this->body) : "";
 	}
 	
@@ -78,3 +115,24 @@ T
 		call_user_func($app);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

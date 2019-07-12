@@ -137,32 +137,30 @@ class F{
     #	$pathinfo = pathinfo($_FILES["file"]["name"]);
     #	$bool = F::UploadImage($_FILES["file"]["tmp_name"], "path/to/upload", $pathinfo["extension"], 550, 368);
     #
-    public static function UploadImage($temp, $path, $file_type, $dw = "", $dh = ""){
+    public static function UploadImage($temp, $path, $file_type, $dw = "", $dh = "", $q = 90){
     	$source_image = FALSE;
     	
-    	if(empty($dw) OR empty($dh)){
-    		$dw = 550;
-    		$dh = 368;
-    	}
-	
-		if (preg_match("/jpg|JPG|jpeg|JPEG/", $file_type)) {
+		if(preg_match("/jpg|JPG|jpeg|JPEG/", $file_type)){
 			$source_image = imagecreatefromjpeg($temp);
-		}
-		elseif (preg_match("/png|PNG/", $file_type)) {
-			
-			if (!$source_image = @imagecreatefrompng($temp)) {
+		}elseif(preg_match("/png|PNG/", $file_type)){
+			if(!$source_image = @imagecreatefrompng($temp)){
 				$source_image = imagecreatefromjpeg($temp);
 			}
-		}
-		elseif (preg_match("/gif|GIF/", $file_type)) {
+		}elseif(preg_match("/gif|GIF/", $file_type)){
 			$source_image = imagecreatefromgif($temp);
-		}		
-		if ($source_image == FALSE) {
+		}
+		
+		if($source_image == FALSE){
 			$source_image = imagecreatefromjpeg($temp);
 		}
 	
 		$ow = imageSX($source_image);
 		$oh = imageSY($source_image);
+		
+		if(empty($dw) OR empty($dh)){
+    		$dw = $ow;
+    		$dh = $oh;
+    	}
 		
 		$o_aspect = $ow / $oh;
 		$d_aspect = $dw / $dh;
@@ -177,22 +175,31 @@ class F{
 		}
 		
 		$virtual_image = imagecreatetruecolor($dw, $dh);
+		
+		if(preg_match("/png|PNG/", $file_type)){
+			imagesavealpha($virtual_image, true);
+			$color = imagecolorallocatealpha($virtual_image, 0, 0, 0, 127); //transparent color
+			imagefill($virtual_image, 0, 0, $color);
+			imagecopyresampled($virtual_image, $source_image, (0 - ($n_width - $dw) / 2), (0 - ($n_height - $dh) / 2), 0, 0, $n_width, $n_height, $ow, $oh);
+			
+			if (@imagepng($virtual_image, $path)) {
+				imagedestroy($virtual_image);
+				imagedestroy($source_image);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 		$kek = imagecolorallocate($virtual_image, 255, 255, 255);
 		imagefill($virtual_image, 0, 0, $kek);
-		
-		
 		
 		$con = imagecopyresampled($virtual_image, $source_image, (0 - ($n_width - $dw) / 2), (0 - ($n_height - $dh) / 2), 0, 0, $n_width, $n_height, $ow, $oh);
 	
 		
-		if (@imagejpeg($virtual_image, $path, 90)) {
+		if (@imagejpeg($virtual_image, $path, $q)) {
 			imagedestroy($virtual_image);
 			imagedestroy($source_image);
-			$a["ow"] = $ow;
-			$a["oh"] = $oh;
-			$a["original_aspect"] = $o_aspect;
-			$a["desire_aspect"] = $d_aspect;
-			//echo json_encode($a);
 			return true;
 		} else {
 			return false;

@@ -1,0 +1,13 @@
+{
+	"constants": [
+		{
+			"PORTAL": 	"http://localhost/"	
+		}
+	],
+	"miscs": [
+		"asset_loader.php"
+	],
+	"headers": [
+		
+	]
+}
