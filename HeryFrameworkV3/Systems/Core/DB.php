@@ -26,13 +26,11 @@ class DB{
 	}
 	
 	public static function conn($conn = []){
-		if(!isset(self::$_instance)){
-			self::$_instance = new DB($conn);
-		}
+		self::$_instance = new DB($conn);
 		return self::$_instance;
 	}
 	
-	public function query($sql, $params){
+	public function query($sql, $params = []){
 		$this->_error = false;
 		if($this->_query = $this->_pdo->prepare($sql)){
 			$x = 1;

@@ -2,8 +2,8 @@
 	"databases": [
 		{
 			"host": "127.0.0.1",
-			"database": "",
-			"username": "",
+			"database": "cf",
+			"username": "root",
 			"password": ""
 		}
 	],
