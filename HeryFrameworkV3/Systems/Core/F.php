@@ -94,18 +94,7 @@ class F{
 	}
 	
 	public static function URLParams($encode = false){
-		$host = $_SERVER["HTTP_HOST"];
-		$request_uri = $_SERVER["REQUEST_URI"];
-		$uri = $host . $request_uri;
-		$x = parse_url($uri);
-		
-		if($encode){
-			$x = F::Encode64($x["query"]);
-		}else{
-			$x = $x["query"];
-		}
-		
-		return $x;
+		return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 	}
 	
 	public static function TrimWord($string, $limit){
