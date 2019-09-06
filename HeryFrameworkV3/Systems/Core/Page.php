@@ -89,6 +89,7 @@ class Page{
 			$top .= $tops;
 		}
 		$header = str_replace("{TOP_TAG}", $top, $header);
+		$header = str_replace("{BODY_ATTR}", $this->body, $header);
 		
 		$bottom = "";
 		foreach($this->bottom_tag as $bottoms){

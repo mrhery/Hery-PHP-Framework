@@ -21,6 +21,6 @@
 	{TOP_TAG}
 </head>
 
-<body>
+<body {BODY_ATTR}>
 	
 
