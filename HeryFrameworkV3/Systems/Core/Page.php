@@ -13,6 +13,11 @@ class Page{
 		}
 	}
 	
+	public static $xx = "";
+	public static function script($x = "test"){
+		self::$xx = $x;
+	}
+	
 	public function addTopTag($tag){
 		$this->top_tag[] = $tag;
 	}
@@ -95,7 +100,6 @@ class Page{
 		foreach($this->bottom_tag as $bottoms){
 			$bottom .= $bottoms;
 		}
-		$footer = str_replace("{BOTTOM_TAG}", $bottom, $footer);
 		
 		echo $header;
 		
@@ -129,6 +133,8 @@ class Page{
 			}
 		}
 		
+		$bottom .= "<script>" . self::$xx . "</script>";
+		$footer = str_replace("{BOTTOM_TAG}", $bottom, $footer);
 		echo $footer;
 	}
 	

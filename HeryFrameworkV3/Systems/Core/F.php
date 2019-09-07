@@ -130,19 +130,21 @@ class F{
     	$source_image = FALSE;
     	
 		if(preg_match("/jpg|JPG|jpeg|JPEG/", $file_type)){
-			$source_image = imagecreatefromjpeg($temp);
+			if(!$source_image = @imagecreatefromjpeg($temp)){
+				return false;
+			}
 		}elseif(preg_match("/png|PNG/", $file_type)){
 			if(!$source_image = @imagecreatefrompng($temp)){
-				$source_image = imagecreatefromjpeg($temp);
+				return false;
 			}
 		}elseif(preg_match("/gif|GIF/", $file_type)){
-			$source_image = imagecreatefromgif($temp);
+			if(!$source_image = @imagecreatefromgif($temp)){
+				return false;
+			}
+		}else{
+			return false;
 		}
 		
-		if($source_image == FALSE){
-			$source_image = imagecreatefromjpeg($temp);
-		}
-	
 		$ow = imageSX($source_image);
 		$oh = imageSY($source_image);
 		
