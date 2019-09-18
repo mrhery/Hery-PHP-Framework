@@ -39,8 +39,13 @@ class Loader{
 					break;
 				}
 				
-				$o = fopen($path, "r");
-				echo stream_get_contents($o);
+				$o = fopen($path, "rb");
+				
+				while(!feof($o)){
+					echo fread($o, 1024);
+					flush();
+				}
+				//echo stream_get_contents($o);
 				fclose($o);
 			}else{
 				die("File not found.");
@@ -55,10 +60,16 @@ class Loader{
 		
 		if(!is_dir($path)){
 			if(file_exists($path)){
-				$o = fopen($path, "r");
+				$o = fopen($path, "rb");
 				header('Content-Type: ' . mime_content_type($path));
 				header('Content-disposition: filename="logo.png"');
-				echo stream_get_contents($o);
+				
+				while(!feof($o)){
+					echo fread($o, 1024);
+					flush();
+				}
+				fclose($o);
+				//echo stream_get_contents($o);
 			}else{
 				echo $path;
 				die("File not found");
