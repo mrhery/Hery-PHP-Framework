@@ -2,6 +2,102 @@
 
 trait Modelv2{
 	private static $table = __CLASS__;
+	
+	//Query Builder Start
+	private static $instance = null;
+	private static $select = "", $where = [], $limit = "", $order = "", $group = "", $having = [];
+	public function __construct(){
+		
+	}
+	
+	public static function select($sel = "*"){
+		$class = __CLASS__;
+		self::$instance = new $class();
+		self::$select = $sel;
+		return self::$instance;
+	}
+	
+	public function where($where = []){
+		self::$where = $where;
+		
+		return $this;
+	}
+	
+	public function having($having = []){
+		self::$having = $having;
+		
+		return $this;
+	}
+	
+	public function limit($limit = ""){
+		self::$limit = $limit;
+		
+		return $this;
+	}
+	
+	public function groupBy($group = ""){
+		self::$group = $group;
+		
+		return $this;
+	}
+	
+	public function orderBy($order = ""){
+		self::$order = $order;
+		
+		return $this;
+	}
+	
+	public function fetch(){
+		$sql = "SELECT " . self::$select . " FROM " . self::$table . " ";
+		$bind = [];
+		
+		if(count(self::$where) > 0){
+			$sql .= "WHERE ";
+			$i = 0;
+			foreach(self::$where as $key => $value){
+				$bind[] = $value;
+				if($i == 0){
+					$sql .= " " . $key . " = ?";
+				}else{
+					$sql .= " AND " . $key . " = ?";
+				}
+				
+				$i++;
+			}
+		}
+		
+		if(!empty(self::$group)){
+			$sql .= " GROUP BY " . self::$group;
+		}
+		
+		if(count(self::$having) > 0){
+			$sql .= "HAVING ";
+			$i = 0;
+			foreach(self::$having as $key => $value){
+				$bind[] = $value;
+				if($i == 0){
+					$sql .= " " . $key . " = ?";
+				}else{
+					$sql .= " AND " . $key . " = ?";
+				}
+				
+				$i++;
+			}
+		}
+		
+		if(!empty(self::$order)){
+			$sql .= " ORDER BY " . self::$order;
+		}
+		
+		if(!empty(self::$limit)){
+			$sql .= " LIMIT " . self::$limit;
+		}
+		
+		return DB::conn()->query($sql, $bind)->results();
+	}
+	
+	//Query Builder End
+	
 	public static function list($setting = array()){
 		$sql = "SELECT ";
 		
@@ -39,12 +135,33 @@ trait Modelv2{
 		
 		$x = DB::conn()->q($sql);
 		
-		return $x->results();
+		$datas = [];
+		foreach($x->results() as $values){
+			$data = (object)[];
+			foreach($values as $key => $value){
+				$data->{$key} = call_user_func(function($val){
+					return F::StringChar($val);
+				}, $value);
+			}
+			
+			$datas[] = $data;
+		}
+		
+		return $datas;
 	}
 	
-	public static function getBy($column){
-		$sql = "SELECT * FROM " . self::$table . " WHERE";
 	
+	
+	
+	
+	public static function count($column = []){
+		$sql = "SELECT COUNT(*) as number FROM " . self::$table . " ";
+	    $s = false;
+	    
+		if(count($column) > 0){
+			$sql .= "WHERE ";
+		}
+		
 		$i = 0;
 		foreach($column as $key => $value){
 			if($i == 0){
@@ -56,9 +173,63 @@ trait Modelv2{
 			$i++;
 		}
 		
+		$x = DB::conn()->query($sql, $column)->results();
+		
+		if(count($x) > 0){
+			return $x[0]->number;
+		}else{
+			return 0;
+		}
+	}
+	
+	public static function getBy($column, $setting = []){
+		$sql = "SELECT * FROM " . self::$table . " WHERE";
+	    $s = false;
+	    
+		$i = 0;
+		foreach($column as $key => $value){
+			if($i == 0){
+				$sql .= " " . $key . " = ?";
+			}else{
+				$sql .= " AND " . $key . " = ?";
+			}
+			
+			$i++;
+		}
+		
+		foreach($setting as $key => $value){
+		    switch($key){
+		        case "order":
+		            $sql .= " ORDER BY " . $value;    
+		        break;
+		        
+		        case "limit":
+		            $sql .= " LIMIT " . $value;
+		        break;
+		    }
+		}
+		
 		$x = DB::conn()->query($sql, $column);
 		
-		return $x->results();
+		if($s){
+			$datas = [];
+			foreach($x->results() as $values){
+				$data = (object)[];
+				foreach($values as $key => $value){
+					$data->{$key} = call_user_func(function($val){
+						return F::StringChar($val);
+					}, $value);
+				}
+				
+				$datas[] = $data;
+			}
+			
+			return $datas;
+		}else{
+			return $x->results();
+		}
+		/**/
+		
 	}
 	
 	public static function insertInto($data){
@@ -67,7 +238,7 @@ trait Modelv2{
 		return ($x->error() ? false : true);
 	}
 	
-	public function deleteBy($data){
+	public static function deleteBy($data){
 		$sql = "DELETE FROM " . self::$table . " WHERE";
 		
 		$i = 0;

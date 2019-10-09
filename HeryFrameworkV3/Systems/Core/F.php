@@ -42,6 +42,10 @@ class F{
 		return $url;
 	}
 	
+	public static function StringChar($str){
+		return htmlspecialchars($str);
+	}
+	
 	public static function Encode64($string){
 		return base64_encode($string);
 	}
@@ -63,25 +67,6 @@ class F{
 	
 	public static function UniqKey($prefix = ""){
 		return $prefix . uniqid();
-	}
-	
-	public static function NewReqKey(){
-		$_SESSION["IR"] = F::Encrypt("cc" . uniqid());
-	}
-	
-	public static function BackURL($page = "", $view = ""){
-		if(isset($_SERVER["HTTP_REFERER"])){
-			$url = $_SERVER["HTTP_REFERER"];
-		}else{
-			$url = "index.php";
-			if(!empty($page)){
-				$url .= "?page=" . $page;
-				if(!empty($view)){
-					$url .= "&view=" . $view;
-				}
-			}
-		}
-		return $url;
 	}
 	
 	public static function GetDate($time = 0, $full = false){
@@ -109,22 +94,7 @@ class F{
 	}
 	
 	public static function URLParams($encode = false){
-		$host = $_SERVER["HTTP_HOST"];
-		$request_uri = $_SERVER["REQUEST_URI"];
-		$uri = $host . $request_uri;
-		$x = parse_url($uri);
-		
-		if($encode){
-			$x = F::Encode64($x["query"]);
-		}else{
-			$x = $x["query"];
-		}
-		
-		return $x;
-	}
-	
-	public static function HTMLChars($string){
-		return htmlspecialchars($string);
+		return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 	}
 	
 	public static function TrimWord($string, $limit){
@@ -144,49 +114,6 @@ class F{
         return null;
     }
     
-    public static function ResponsiveIFrame($string, $default_size = ""){
-    	$a = str_replace('width="'. $default_size . '"', 'width="100%" class="contactmap"', $string );
-		$a = str_replace('width="640"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="100"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="200"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="300"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="400"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="500"', 'width="100%" class="contactmap"', $a );
-		$a = str_replace('width="600"', 'width="100%" class="contactmap"', $a );
-		return $a;
-    }
-    
-    public static function GetRefererData($_url) { 
-        if(!empty($_url)){
-	        $p = $q = "";
-	        $chunk_url = parse_url($_url); 
-	        $_data["host"] = ($chunk_url['host']) ? $chunk_url['host'] : ''; 
-	        if(isset($chunk_url['query'])){
-				parse_str($chunk_url['query']); 
-			}
-	        $_data["keyword"] = ($p) ? $p: (($q) ? $q : '' ); 
-	        return $_data; 
-        }else{
-        	return (string)"";
-        }
-    }
-    
-    public static function GetRemoteIP(){
-    	$x = $_SERVER["REMOTE_ADDR"];
-    	
-    	return $x;
-    }
-    
-    public static function GetRefererURL(){
-    	if(isset($_SERVER["HTTP_REFERER"])){
-    		$x = $_SERVER["HTTP_REFERER"];
-    	}else{
-    		$x = "";
-    	}
-    	
-    	return $x;
-    }
-    
     public static function String($string){
     	return htmlspecialchars($string);
     }
@@ -199,32 +126,32 @@ class F{
     #	$pathinfo = pathinfo($_FILES["file"]["name"]);
     #	$bool = F::UploadImage($_FILES["file"]["tmp_name"], "path/to/upload", $pathinfo["extension"], 550, 368);
     #
-    public static function UploadImage($temp, $path, $file_type, $dw = "", $dh = ""){
+    public static function UploadImage($temp, $path, $file_type, $dw = "", $dh = "", $q = 90){
     	$source_image = FALSE;
     	
-    	if(empty($dw) OR empty($dh)){
-    		$dw = 550;
-    		$dh = 368;
-    	}
-	
-		if (preg_match("/jpg|JPG|jpeg|JPEG/", $file_type)) {
-			$source_image = imagecreatefromjpeg($temp);
-		}
-		elseif (preg_match("/png|PNG/", $file_type)) {
-			
-			if (!$source_image = @imagecreatefrompng($temp)) {
-				$source_image = imagecreatefromjpeg($temp);
+		if(preg_match("/jpg|JPG|jpeg|JPEG/", $file_type)){
+			if(!$source_image = @imagecreatefromjpeg($temp)){
+				return false;
 			}
+		}elseif(preg_match("/png|PNG/", $file_type)){
+			if(!$source_image = @imagecreatefrompng($temp)){
+				return false;
+			}
+		}elseif(preg_match("/gif|GIF/", $file_type)){
+			if(!$source_image = @imagecreatefromgif($temp)){
+				return false;
+			}
+		}else{
+			return false;
 		}
-		elseif (preg_match("/gif|GIF/", $file_type)) {
-			$source_image = imagecreatefromgif($temp);
-		}		
-		if ($source_image == FALSE) {
-			$source_image = imagecreatefromjpeg($temp);
-		}
-	
+		
 		$ow = imageSX($source_image);
 		$oh = imageSY($source_image);
+		
+		if(empty($dw) OR empty($dh)){
+    		$dw = $ow;
+    		$dh = $oh;
+    	}
 		
 		$o_aspect = $ow / $oh;
 		$d_aspect = $dw / $dh;
@@ -239,22 +166,31 @@ class F{
 		}
 		
 		$virtual_image = imagecreatetruecolor($dw, $dh);
+		
+		if(preg_match("/png|PNG/", $file_type)){
+			imagesavealpha($virtual_image, true);
+			$color = imagecolorallocatealpha($virtual_image, 0, 0, 0, 127); //transparent color
+			imagefill($virtual_image, 0, 0, $color);
+			imagecopyresampled($virtual_image, $source_image, (0 - ($n_width - $dw) / 2), (0 - ($n_height - $dh) / 2), 0, 0, $n_width, $n_height, $ow, $oh);
+			
+			if (@imagepng($virtual_image, $path)) {
+				imagedestroy($virtual_image);
+				imagedestroy($source_image);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 		$kek = imagecolorallocate($virtual_image, 255, 255, 255);
 		imagefill($virtual_image, 0, 0, $kek);
-		
-		
 		
 		$con = imagecopyresampled($virtual_image, $source_image, (0 - ($n_width - $dw) / 2), (0 - ($n_height - $dh) / 2), 0, 0, $n_width, $n_height, $ow, $oh);
 	
 		
-		if (@imagejpeg($virtual_image, $path, 90)) {
+		if (@imagejpeg($virtual_image, $path, $q)) {
 			imagedestroy($virtual_image);
 			imagedestroy($source_image);
-			$a["ow"] = $ow;
-			$a["oh"] = $oh;
-			$a["original_aspect"] = $o_aspect;
-			$a["desire_aspect"] = $d_aspect;
-			//echo json_encode($a);
 			return true;
 		} else {
 			return false;

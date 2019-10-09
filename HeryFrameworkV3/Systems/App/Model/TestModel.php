@@ -1,4 +1,0 @@
-<?php
-//Your model Here
-
-?>

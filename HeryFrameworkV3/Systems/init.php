@@ -1,23 +1,23 @@
 <?php
 require_once(__DIR__ . "/Misc/document_access.php");
+require_once(__DIR__ . "/Misc/autoload.php");
+session_start();
 
 ###################################################
 ###################DO NOT EDIT BELOW###############
 ###################################################
 /*#*/ define("SYSTEM", __DIR__ . "/");	   		  #
-/*#*/ define("VIEW", SYSTEM . "App/View/");		  #
-/*#*/ define("PAGES", VIEW . "pages/");    		  #
-/*#*/ define("ASSET", SYSTEM . "Assets/"); 		  #
-/*#*/ define("UPLOAD", ASSET . "medias/"); 		  #
-/*#*/ define("CLASSES", SYSTEM . "App/Classes/"); #
+/*#*/ define("MISC", __DIR__ . "/Misc/");	   	  #
+/*#*/ define("CORE", __DIR__ . "/Core/");	   	  #
+/*#*/ define("APPS", SYSTEM . "Apps/");	   		  #
+/*#*/ define("DEF_NAME", "Developed with HPF");	  #
 ###################################################
 
-#PHP Autoload
+define("ROUTE", Input::get("route"));
 
-
-#Database Configuration
-require_once(__DIR__ . "/configure.php");
+require_once(__DIR__ . "/setup.php");
 
 #Web Application
-require_once(__DIR__ . "/App/App.php");
-?>
+require_once(__DIR__ . "/Apps/Apps.php");
+
+

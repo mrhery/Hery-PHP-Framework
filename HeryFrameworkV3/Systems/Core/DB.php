@@ -5,22 +5,32 @@ class DB{
 	private static $_instance = null;
 	private $_pdo, $_query, $_error = false, $_results, $_count = 0;
 	
-	private function __construct(){
+	private function __construct($conn = []){
+		if(is_int($conn)){
+			if(isset(self::database()[$conn])){
+				$conn = self::database()[$conn];
+			}else{
+				$conn = count(self::database()) > 0 ? self::database()[0] : [];
+			}
+		}else{
+			if(count($conn) < 4){
+				$conn = count(self::database()) > 0 ? self::database()[0] : [];
+			}
+		}
+		
 		try{
-			$this->_pdo = new PDO("mysql:host=" . Config::$host . "; dbname=" . Config::$database, Config::$username, Config::$password);
+			$this->_pdo = new PDO("mysql:host=" . $conn["host"] . "; dbname=" . $conn["database"], $conn["username"], $conn["password"]);
 		}catch(PDOException $ex){
 			die($ex->getMessage());
 		}
 	}
 	
-	public static function conn(){
-		if(!isset(self::$_instance)){
-			self::$_instance = new DB();
-		}
+	public static function conn($conn = []){
+		self::$_instance = new DB($conn);
 		return self::$_instance;
 	}
 	
-	public function query($sql, $params){
+	public function query($sql, $params = []){
 		$this->_error = false;
 		if($this->_query = $this->_pdo->prepare($sql)){
 			$x = 1;
@@ -115,6 +125,26 @@ class DB{
 		return $this;
 	}
 	
+	public static function database(){
+		$array = [];
+		if(file_exists(APPS . APP_CODE. "/configure.json")){
+			$json = file_get_contents(APPS . APP_CODE . "/configure.json");
+			$obj = json_decode($json);
+			
+			if(isset($obj->databases)){
+				foreach($obj->databases as $db){
+					$array[] = [
+						"database"	=> $db->database,
+						"username"	=> $db->username,
+						"password"	=> $db->password,
+						"host"		=> $db->host
+					];
+				}
+			}
+		}
+		
+		return $array;
+	}
 	
 	public function results(){
 		return $this->_results;
@@ -127,7 +157,4 @@ class DB{
 	public function count(){
 		return $this->_count;
 	}
-	
 }
-
-?>
