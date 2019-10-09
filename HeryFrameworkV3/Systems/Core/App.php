@@ -39,20 +39,11 @@ class App{
 			@mkdir(APPS . $this->code . "/Controller", 0777, true);
 			@mkdir(APPS . $this->code . "/View/", 0777, true);
 			@mkdir(APPS . $this->code . "/Assets/", 0777, true);
-			// $o = fopen(APPS . $this->code . "/database.php", "w+");
-			// fwrite($o, <<<'T'
-// <?php
-// #Database Configuration
-// class Config{
-	// public static $host 	= "127.0.0.1";
-	// public static $database	= "";
-	// public static $username	= "";
-	// public static $password	= "";
-// }
-
-// T
-// );
-			// fclose($o);
+			
+			file_put_contents(APPS . $this->code . "/Classes/index.php", "<?php\n//written by hpf");
+			file_put_contents(APPS . $this->code . "/Controller/index.php", "<?php\n//written by hpf");
+			file_put_contents(APPS . $this->code . "/View/index.php", "<?php\n//written by hpf");
+			file_put_contents(APPS . $this->code . "/Assets/index.php", "<?php\n//written by hpf");
 			
 			$o = fopen(APPS . $this->code . "/configure.json", "w+");
 			fwrite($o, <<<'T'
