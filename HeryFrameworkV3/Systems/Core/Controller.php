@@ -2,10 +2,20 @@
 require_once(dirname(__DIR__) . "/Misc/document_access.php");
 
 class Controller{
-	public function __construct($action, $route = ""){
-		if(isset($_POST["__SUBMIT__"])){
-			if(Input::post("__SUBMIT__") == $_SESSION["IR"]){
-				$this->Execute(Input::post("__ROUTE__"), $route);
+	public function __construct($routes = [], $cross = false){
+		if(isset($_POST["OWASP_CSRFTOKEN"])){
+			if(Input::post("OWASP_CSRFTOKEN") == $_SESSION["IR"]){
+				
+				if(!$cross){
+					if(in_array(Input::post("__ROUTE__"), $routes)){
+						$this->Execute(Input::post("__ROUTE__"));
+					}else{
+						new Alert("error", "Requested route is not available in this context.");
+					}
+				}else{
+					$this->Execute(Input::post("__ROUTE__"));
+				}
+				
 				$_SESSION["IR"] = F::UniqKey();
 			}else{
 				new Alert("error", "Request token has expired, please try again.");
@@ -13,19 +23,23 @@ class Controller{
 		}
 	}
 	
-	public function Execute($path, $route = ""){
+	public function Execute($path){
 		$path = dirname(__DIR__) . "/Apps/". APP_CODE ."/Controller/" . $path . ".php";
 		
-		if(file_exists($path)){
-			include_once($path);
-		}else{
-			echo "Form cannot be submit. There's an error at your form input or controller file cannot be read.";
+		if(!file_exists($path)){
+			if(!is_dir(dirname($path))){
+				mkdir(dirname($path), 0777, true);
+			}
+			
+			file_put_contents($path, "This controller is empty");
 		}
+		
+		include_once($path);
 	}
 	
 	public static function Form($route = '', $setting = []){
 	    echo 
-	        "<input type='hidden' name='__SUBMIT__' value='" . $_SESSION["IR"] . "' />",
+	        "<input type='hidden' name='OWASP_CSRFTOKEN' value='" . $_SESSION["IR"] . "' />",
 	        "<input type='hidden' name='__ROUTE__' value='" . $route . "' />"
 	    ;
 	    

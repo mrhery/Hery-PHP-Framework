@@ -150,10 +150,6 @@ trait Modelv2{
 		return $datas;
 	}
 	
-	
-	
-	
-	
 	public static function count($column = []){
 		$sql = "SELECT COUNT(*) as number FROM " . self::$table . " ";
 	    $s = false;

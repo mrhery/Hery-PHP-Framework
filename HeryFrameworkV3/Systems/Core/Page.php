@@ -13,9 +13,14 @@ class Page{
 		}
 	}
 	
-	public static $xx = "";
-	public static function script($x = "test"){
-		self::$xx = $x;
+	public static $append = [];
+	public static $prepend = [];
+	public static function append($x){
+		self::$append[] = $x;
+	}
+	
+	public static function prepend($x){
+		self::$prepend[] = $x;
 	}
 	
 	public function addTopTag($tag){
@@ -103,6 +108,14 @@ class Page{
 		
 		echo $header;
 		
+		foreach(self::$prepend as $preppnd){
+			if(is_callable($preppnd)){
+				call_user_func($preppnd);
+			}else{
+				echo $preppnd;
+			}
+		}
+		
 		if(!empty($this->main_menu)){
 			$path = VIEW . $this->main_menu;
 			if(file_exists($path)){
@@ -133,7 +146,14 @@ class Page{
 			}
 		}
 		
-		$bottom .= "<script>" . self::$xx . "</script>";
+		foreach(self::$append as $appnd){
+			if(is_callable($appnd)){
+				call_user_func($appnd);
+			}else{
+				echo $appnd;
+			}
+		}
+		
 		$footer = str_replace("{BOTTOM_TAG}", $bottom, $footer);
 		echo $footer;
 	}
@@ -146,11 +166,20 @@ class Page{
 		return $string;
 	}
 	
-	public static function Load($path, $route = ""){
+	public static function Load($path, $var = []){
+		extract($var);
 		if(file_exists(VIEW . $path . ".php")){
 			include_once(VIEW . $path . ".php");
 		}else{
-			die("file " . VIEW . $path . " not found");
+			$full = VIEW . $path . ".php";
+			if(!is_dir(dirname($full))){
+				mkdir(dirname($full), 0777, true);
+			}
+			
+			$o = fopen($full, "w+");
+			fclose($o);
+			
+			include_once($full);
 		}
 	}
 }

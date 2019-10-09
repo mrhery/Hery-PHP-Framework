@@ -1,6 +1,9 @@
 <?php
 require_once(__DIR__ . "/Misc/document_access.php");
+require_once(__DIR__ . "/Misc/security_header.php");
+require_once(__DIR__ . "/Misc/security_cookie.php");
 require_once(__DIR__ . "/Misc/autoload.php");
+
 session_start();
 
 ###################################################
