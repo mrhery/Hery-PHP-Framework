@@ -150,7 +150,7 @@ class Page{
 			if(is_callable($appnd)){
 				call_user_func($appnd);
 			}else{
-				echo $appnd;
+				$bottom .= $appnd;
 			}
 		}
 		
