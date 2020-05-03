@@ -1,6 +1,14 @@
 <?php
 
 class html{
+	public static function script($string = ""){
+		?>
+		<script>
+			<?= $string ?>
+		</script>
+		<?php
+	}
+	
 	public static function div($settings = array(), $elements = null){
 		$str = "<div ";
 		
