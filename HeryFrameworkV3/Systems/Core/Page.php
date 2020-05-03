@@ -13,10 +13,10 @@ class Page{
 		}
 	}
 	
-	public static $append = [];
+	public static $append = "";
 	public static $prepend = [];
 	public static function append($x){
-		self::$append[] = $x;
+		self::$append .= $x;
 	}
 	
 	public static function prepend($x){
@@ -146,14 +146,14 @@ class Page{
 			}
 		}
 		
-		foreach(self::$append as $appnd){
-			if(is_callable($appnd)){
-				call_user_func($appnd);
-			}else{
-				echo $appnd;
-			}
-		}
-		
+		// foreach(self::$append as $appnd){
+			// if(is_callable($appnd)){
+				// call_user_func($appnd);
+			// }else{
+				// echo $appnd;
+			// }
+		// }
+		$bottom .= self::$append;
 		$footer = str_replace("{BOTTOM_TAG}", $bottom, $footer);
 		echo $footer;
 	}

@@ -2,13 +2,19 @@
 require_once(dirname(__DIR__) . "/Misc/document_access.php");
 
 class Controller{
-	public function __construct($routes = [], $cross = false){
+	public function __construct($routes = [], $set = []){
 		if(isset($_POST["OWASP_CSRFTOKEN"])){
 			if(Input::post("OWASP_CSRFTOKEN") == $_SESSION["IR"]){
 				
-				if(!$cross){
+				if(!isset($set["cross"])){
 					if(in_array(Input::post("__ROUTE__"), $routes)){
 						$this->Execute(Input::post("__ROUTE__"));
+						
+						if(isset($set["refresh"])){
+							HTML::script('
+								window.location= "'. F::URLParams() .'";
+							');
+						}
 					}else{
 						new Alert("error", "Requested route is not available in this context.");
 					}
@@ -19,6 +25,30 @@ class Controller{
 				$_SESSION["IR"] = F::UniqKey();
 			}else{
 				new Alert("error", "Request token has expired, please try again.");
+			}
+		}else{
+			if(isset($_SESSION["SUCCESS"])){
+				new Alert("success", $_SESSION["SUCCESS"]);
+				
+				unset($_SESSION["SUCCESS"]);
+			}
+			
+			if(isset($_SESSION["ERROR"])){
+				new Alert("error", $_SESSION["ERROR"]);
+				
+				unset($_SESSION["ERROR"]);
+			}
+			
+			if(isset($_SESSION["WARNING"])){
+				new Alert("warning", $_SESSION["WARNING"]);
+				
+				unset($_SESSION["WARNING"]);
+			}
+			
+			if(isset($_SESSION["INFO"])){
+				new Alert("info", $_SESSION["INFO"]);
+				
+				unset($_SESSION["INFO"]);
 			}
 		}
 	}
