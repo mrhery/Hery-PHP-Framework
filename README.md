@@ -105,20 +105,37 @@ If the URL route are too long, then used the index number instead of enumeration
 The best way to create a page in HPF is using the `Page` class. Here is the way to create page using `Page` class. This page class can only start it's instance in `Apps/your_app_code/App.php` where the only first route can applied this. Here's some of the method available in class `Page`:
 
 ```
-//Page::title [var:string] #Non-Static
+Page::title [var:string] #Non-Static
 //To set the page title on the top af browser tab.
 //
-//Page::addTopTag(@param) #Non-Static
+Page::addTopTag(@param) #Non-Static
 //@param:string -> meta tag string: <meta charset="UTF-8" /><meta ....
 //Set the meta tag of the current loaded page
 //
-//Page::loadPage(@param1, [@param2])
+Page::loadPage(@param1, [@param2])
 //@param1:string -> file name in Apps/your_app_code/View. Can be "admin/index", "private/home" without .php extension
 //@param2:string -> $route, if only if you want to use the route in the loaded page. Trust me, YOU NEED THIS
 //Set the page design from Systems/App/View/pages
 //
-//Page::Render() #Non-Static
-//Redering the page A.K.A. viewing the page.
+Page::Render() #Non-Static
+//Redering the page A.K.A. view
+//
+Page::Load(@param1, [@param2]) #Static
+//@param1:string -> File path
+//@param2:array["var_name" => (mixed)"value"]
+//Use Page::Load("", []) to include a 'Page' file from 'View' folder.
+//File path excluded '.php' extension.
+//You can parse variables to icluded page on second parameter.
+//Example:
+
+#index.php
+Page::Load("pages/main", ["varX" => "hello", "varY" => "world"]);
+
+#pages/main.php
+
+echo $varX . " " . $varY;
+
+
 ```
 The above methods is the basic method that oftenly use in development. Write these code in `Apps/your_app_code/App.php` file in the `case` code block. Example:
 
