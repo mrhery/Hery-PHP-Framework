@@ -22,6 +22,9 @@ Route::set("/contact-us")->to("User/ContactUs::index");
 	// Route::set("delete")->to("Items::delete");
 // });
 
+$page = new Page();
+$page->addTopTag("");
+
 Route::make("test")->to(function(){
 	Route::set("|list|all")->to("Items::list");
 	
@@ -47,7 +50,6 @@ if(!$data){
 		}else{
 			$class = explode("::", $value->action)[0];
 			$method = explode("::", $value->action)[1];
-			echo $class . " on method " . $method;
 			
 			$file = APP . "Controller/" . $class . ".php";
 			$folder = dirname($file);
@@ -74,6 +76,12 @@ CODE
 );
 				fclose($o);
 			}
+			
+			include_once($file);
+			$x = new $class;
+			$x->setPage($page);
+			$x->{$method}();
+			
 		}
 	}
 }

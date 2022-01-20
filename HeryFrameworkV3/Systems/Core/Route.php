@@ -14,8 +14,6 @@ class Route {
 	public static function controller(){
 		$data = self::all();
 		
-		// print_r($data);
-		
 		$urls = url::get("array");
 		$surl = url::get("path");
 		$key = "";
@@ -140,7 +138,6 @@ class Route {
 				$a = $action();
 				
 				if(gettype($a) != "object"){
-					// echo "asdasd\n";
 					$this->to($a);
 				}
 			break;
