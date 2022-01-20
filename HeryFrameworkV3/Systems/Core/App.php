@@ -119,6 +119,9 @@ T
 		
 		include_once(APPS . $this->code . "/setup.php");
 		include_once(APPS . $this->code . "/App.php");
+		
+		
+		
 		is_callable($this->body) ? call_user_func($this->body) : "";
 	}
 	
