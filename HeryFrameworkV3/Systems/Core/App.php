@@ -47,7 +47,15 @@ class App{
 			file_put_contents(APPS . $this->code . "/Controller/index.php", "<?php\n//written by hpf");
 			file_put_contents(APPS . $this->code . "/View/index.php", "<?php\n//written by hpf");
 			file_put_contents(APPS . $this->code . "/Assets/index.php", "<?php\n//written by hpf");
-			
+			file_put_contents(APPS . $this->code . "/setup.php", <<<'CODE'
+<?php
+if(!Session::exist("Routes")){
+	Session::create("Routes", [], ["writeToFile" => true]);
+}
+
+CODE
+);
+
 			$o = fopen(APPS . $this->code . "/configure.json", "w+");
 			fwrite($o, <<<'T'
 {
@@ -109,6 +117,7 @@ T
 			}
 		}
 		
+		include_once(APPS . $this->code . "/setup.php");
 		include_once(APPS . $this->code . "/App.php");
 		is_callable($this->body) ? call_user_func($this->body) : "";
 	}
