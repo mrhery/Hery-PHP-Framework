@@ -120,7 +120,54 @@ T
 		include_once(APPS . $this->code . "/setup.php");
 		include_once(APPS . $this->code . "/App.php");
 		
+		$data = Route::controller();
+
+		if(!$data){
+			echo "Route not found";
+		}else{
+			foreach($data as $k => $value){
+				if(isset($value->text) && $value->text){
+					echo $value->action;
+				}else{
+					$class = explode("::", $value->action)[0];
+					$method = explode("::", $value->action)[1];
+					
+					$file = APP . "Controller/" . $class . ".php";
+					$folder = dirname($file);
+					$class = basename($class);
+					
+					if(!file_exists($file)){
+						if(!is_dir($folder)){
+							mkdir($folder, 0777, true);
+						}
+						
+						$o = fopen($file, "w+");
+						fwrite($o, <<<CODE
+		<?php
+
+		class $class extends Controller {
+			public function __construct() {}
+			
+			public function $method (){
+				
+			}
+		}
+
+CODE
+);
+						fclose($o);
+					}
+					
+					include_once($file);
+					$x = new $class;
+					$x->setPage($page);
+					$x->{$method}();
+					
+				}
+			}
+		}
 		
+		Session::destroy("Routes");
 		
 		is_callable($this->body) ? call_user_func($this->body) : "";
 	}
