@@ -32,13 +32,16 @@ class App{
 		define("APP", APPS . APP_CODE . "/");
 		define("VIEW", APP . "View/");
 		define("CLASSES", APP . "Classes/");
-		define("ASSET", APP . "Assets/");
+		
+		if(!defined("ASSET")){
+			define("ASSET", APP . "Assets/");
+		}
 		
 		if(!is_dir(APPS . $this->code)){
 			@mkdir(APPS . $this->code . "/Classes", 0777, true);
 			@mkdir(APPS . $this->code . "/Controller", 0777, true);
 			@mkdir(APPS . $this->code . "/View/", 0777, true);
-			@mkdir(APPS . $this->code . "/Assets/", 0777, true);
+			@mkdir(ASSET, 0777, true);
 			
 			file_put_contents(APPS . $this->code . "/Classes/index.php", "<?php\n//written by hpf");
 			file_put_contents(APPS . $this->code . "/Controller/index.php", "<?php\n//written by hpf");
