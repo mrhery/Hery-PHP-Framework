@@ -79,8 +79,11 @@ if(!Session::exist("Routes")){
 CODE
 );
 
+			$iv = F::Encode64(Encrypter::CreateIv());
+			$pass = hash("md5", F::UniqKey());
+			
 			$o = fopen(APPS . $this->code . "/configure.json", "w+");
-			fwrite($o, <<<'T'
+			fwrite($o, <<<T
 {
 	"databases": [
 		{
@@ -93,6 +96,12 @@ CODE
 	"constants": [
 		{
 			"PORTAL": 	"http://localhost/"
+		},
+		{
+			"IV": "$iv"
+		},
+		{
+			"PASS": "$pass"
 		}
 	],
 	"miscs": [
@@ -145,12 +154,37 @@ T
 		
 		include_once(APPS . $this->code . "/setup.php");
 		
-		if(isset($set["reload"])){
+		if(isset($set["reload"]) && $set["reload"]){
 			include_once(APPS . $this->code . "/database.php");
 		
 			DB::prep()->reload();
 		}
 		
+		if(isset($_POST["__HPF_POST_REQUEST__"])){
+			$path = url::get("path");
+			
+			$classx = Encrypter::AESDecrypt(F::Decode64($path), PASS, F::Decode64(IV));
+			
+			$class = explode("::", $classx)[0];
+			$method = explode("::", $classx)[1];
+			$file = APP . "Controller/" . $class . ".php";
+			
+			if(!file_exists($file)){
+				throw new Exception("Controller ". $class ." does not exists.");
+			}else{
+				include_once($file);
+			
+				$x = new $class;
+				
+				if(method_exists($class, $method)){
+					$x->{$method}();
+				}else{
+					throw new Exception("Method ". $method ." does not exists in Controller ". $class .".");
+				}
+			}
+			
+			exit();
+		}
 		
 		include_once(APPS . $this->code . "/App.php");
 		
@@ -199,8 +233,11 @@ CODE
 						$x->setPage($page);
 					}
 					
-					$x->{$method}();
-					
+					if(method_exists($class, $method)){
+						$x->{$method}();
+					}else{
+						throw new Exception("Method " . $method . " does not exists in Controller " . $class . ".");
+					}
 				}
 			}
 		}

@@ -55,8 +55,8 @@ class DB{
 	
 	public function reload(){
 		foreach($this->tables as $table){
-			echo $table->build();
-			DB::conn()->query($table->build());
+			// echo $table->build();
+			$x = DB::conn()->query($table->build())->results();
 		}
 	}
 	

@@ -16,7 +16,11 @@ class Encrypter{
 		$cipher->setKey($key);
 		$cipher->setIV($iv);
 		
-		return $cipher->decrypt($string);
+		try{
+			return $cipher->decrypt($string);
+		}catch(Exception $e){
+			return false;
+		}
 	}
 	
 	public static function CreateIv(){

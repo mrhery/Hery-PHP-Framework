@@ -85,6 +85,8 @@ class Column {
 	
 	public function rename($name){
 		$this->rename = $name;
+		
+		return $this;
 	}
 	
 	public function drop(){

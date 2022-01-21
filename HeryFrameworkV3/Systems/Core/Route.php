@@ -27,6 +27,8 @@ class Route {
 			
 			$key .= $url;
 			
+			// echo $key . "\n";
+			
 			if(isset($data[$key])){
 				$found = true;
 				$kf = $key;
@@ -34,6 +36,7 @@ class Route {
 		}
 		
 		if(!$found){
+			
 			return false;
 		}else{
 			if($surl != $kf){
