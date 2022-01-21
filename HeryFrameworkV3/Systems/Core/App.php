@@ -26,7 +26,7 @@ class App{
 		$this->body = $body;
 	}
 	
-	public function run(){		
+	public function run($set = []){		
 		define("APP_CODE", $this->code);
 		define("APP_NAME", $this->name);
 		define("APP", APPS . APP_CODE . "/");
@@ -47,6 +47,29 @@ class App{
 			file_put_contents(APPS . $this->code . "/Controller/index.php", "<?php\n//written by hpf");
 			file_put_contents(APPS . $this->code . "/View/index.php", "<?php\n//written by hpf");
 			file_put_contents(APPS . $this->code . "/Assets/index.php", "<?php\n//written by hpf");
+			
+			file_put_contents(APPS . $this->code . "/database.php", <<<'CODE'
+<?php
+//Place you database setup here
+
+/*
+//Example:
+DB::prep()->table("users", function(Table $table){
+	$table->varchar("name")->length(100);
+	$table->email("email")->rename("emails");
+	$table->phone("phone")->length(5);
+	$table->password("password")->drop();
+	$table->time("upadateTime");
+});
+
+DB::prep()->table("users", function(Table $table){
+	$table->drop();
+});
+
+*/
+CODE
+);
+			
 			file_put_contents(APPS . $this->code . "/setup.php", <<<'CODE'
 <?php
 if(!Session::exist("Routes")){
@@ -86,6 +109,9 @@ T
 <?php
 //A journey start with a step
 
+Route::set("")->to(function(){
+	return "Hi from HPF!";
+});
 T
 );
 			fclose($o);
@@ -118,6 +144,14 @@ T
 		}
 		
 		include_once(APPS . $this->code . "/setup.php");
+		
+		if(isset($set["reload"])){
+			include_once(APPS . $this->code . "/database.php");
+		
+			DB::prep()->reload();
+		}
+		
+		
 		include_once(APPS . $this->code . "/App.php");
 		
 		$data = Route::controller();
@@ -143,15 +177,15 @@ T
 						
 						$o = fopen($file, "w+");
 						fwrite($o, <<<CODE
-		<?php
+<?php
 
-		class $class extends Controller {
-			public function __construct() {}
-			
-			public function $method (){
-				
-			}
-		}
+class $class extends Controller {
+	public function __construct() {}
+	
+	public function $method (){
+		
+	}
+}
 
 CODE
 );
@@ -160,7 +194,11 @@ CODE
 					
 					include_once($file);
 					$x = new $class;
-					$x->setPage($page);
+					
+					if(isset($page)){
+						$x->setPage($page);
+					}
+					
 					$x->{$method}();
 					
 				}

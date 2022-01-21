@@ -1,2 +1,0 @@
-<?php
-//written by hpf

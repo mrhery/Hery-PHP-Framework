@@ -3,7 +3,11 @@ require_once(dirname(__DIR__) . "/Misc/document_access.php");
 
 class DB{
 	private static $_instance = null;
+	private static $_instanceP = null;
 	private $_pdo, $_query, $_error = false, $_results, $_count = 0;
+	public $dbname = "";
+	
+	public $tables = [];
 	
 	private function __construct($conn = []){
 		if(is_int($conn)){
@@ -19,6 +23,8 @@ class DB{
 		}
 		
 		try{
+				$this->dbname = $conn["database"];
+				
 			$this->_pdo = new PDO("mysql:host=" . $conn["host"] . "; dbname=" . $conn["database"], $conn["username"], $conn["password"]);
 		}catch(PDOException $ex){
 			die($ex->getMessage());
@@ -28,6 +34,30 @@ class DB{
 	public static function conn($conn = []){
 		self::$_instance = new DB($conn);
 		return self::$_instance;
+	}
+	
+	public static function prep($conn = []){
+		if(is_null(self::$_instanceP)){
+			self::$_instanceP = new DB($conn);
+		}
+		
+		return self::$_instanceP;
+	}
+	
+	public function table($tname = "", $action = null){
+		if(isset($this->tables[$tname])){
+			$action($this->tables[$tname]);
+		}else{
+			$this->tables[$tname] = new Table($tname, $this);
+			$action($this->tables[$tname]);
+		}
+	}
+	
+	public function reload(){
+		foreach($this->tables as $table){
+			echo $table->build();
+			DB::conn()->query($table->build());
+		}
 	}
 	
 	public function query($sql, $params = []){

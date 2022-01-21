@@ -6,6 +6,7 @@ class Page{
 	private $top_tag = [], $bottom_tag = [];
 	private $page = array(), $footer = "", $main_menu = "", $breadcumb = "", $route = "";
 	private $body = "", $contentType = "text/html";
+	private $pageData = null;
 	
 	public function __construct($setting = array()){		
 		if(isset($setting["Content-Type"])){
@@ -55,13 +56,13 @@ class Page{
 		$this->breadcumb = $path;
 	}
 	
-	public function loadPage($page = "", $route = ""){
+	public function loadPage($page = "", $data = null){
 		if(empty($page)){
 			die("Fail including page. ");
 		}
 		
-		if(!empty($route)){
-			$this->route = $route;
+		if(!is_null($data)){
+			$this->pageData = $data;
 		}
 		
 		$path = VIEW . $page . ".php";
@@ -82,6 +83,10 @@ class Page{
 	}
 	
 	public function Render(){
+		if(!is_null($this->pageData)){
+			extract($this->pageData);
+		}
+		
 		$route = $this->route;
 		$header = $this->Read("header");
 		$footer = $this->Read("footer");
