@@ -5,9 +5,7 @@ class App{
 	public function __construct($name = DEF_NAME, $code = "DEFAULT"){
 		$this->name = $name;
 		$this->code = $code;
-		$this->route = Input::get("route");
-		
-		
+		$this->route = Input::get("route");		
 	}
 	
 	public function name($name = ""){
@@ -41,12 +39,12 @@ class App{
 			@mkdir(APPS . $this->code . "/Classes", 0777, true);
 			@mkdir(APPS . $this->code . "/Controller", 0777, true);
 			@mkdir(APPS . $this->code . "/View/", 0777, true);
-			@mkdir(ASSET, 0777, true);
+			@mkdir(APPS . $this->code . "/Vendor/", 0777, true);
 			
 			file_put_contents(APPS . $this->code . "/Classes/index.php", "<?php\n//written by hpf");
 			file_put_contents(APPS . $this->code . "/Controller/index.php", "<?php\n//written by hpf");
 			file_put_contents(APPS . $this->code . "/View/index.php", "<?php\n//written by hpf");
-			file_put_contents(APPS . $this->code . "/Assets/index.php", "<?php\n//written by hpf");
+			file_put_contents(APPS . $this->code . "/Vendor/index.php", "<?php\n//written by hpf");
 			
 			file_put_contents(APPS . $this->code . "/database.php", <<<'CODE'
 <?php
