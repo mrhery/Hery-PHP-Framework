@@ -1,8 +1,14 @@
 
-# Hery PHP Framework (HPF) version 3.2
-HPF is a small PHP Framework to develop a web with routing page, modelling class from database (etc.) easier. 70% of this version are taken from version 2.
+# Hery PHP Framework (HPF) version 4
+HPF is a small PHP Framework to develop a web with routing page, modelling class from database (etc.) easier. 
 
-HPF version 3.2 support multi application in one Framework directory. And it support "Turbo" to travel file from another app to another app (include run PHP file from another app).
+HPF version 4 support multi application in one Framework directory. And it support "Turbo" to travel file from another app to another app (include run PHP file from another app).
+
+## Update from HPFv3.2
+- Controller is not just form control
+- Route class to routing url to controller
+- Design your database table using PHP #nomoresqlfile
+- Temporary session for message box
 
 # Where to Start?
 ## Installation Process
