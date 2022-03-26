@@ -56,10 +56,32 @@ trait Modelv2{
 			$i = 0;
 			foreach(self::$where as $key => $value){
 				$bind[] = $value;
+				
+				$col = $key;
+				
+				$op = [" like", ">", "<", "=", "!=", " in", " not"];
+				$cop = false;
+				
+				echo __LINE__ . "\n";
+				foreach($op as $o){
+					echo __LINE__ . "\n";
+					if(strpos($col, $o) > 0){
+						echo __LINE__ . "\n";
+						$cop = true;
+						break;
+					}
+				}
+				
+				if(!$cop){
+					echo __LINE__ . "\n";
+					$col .= " =";
+				}
+				
+				
 				if($i == 0){
-					$sql .= " " . $key . " = ?";
+					$sql .= " " . $col . " ?";
 				}else{
-					$sql .= " AND " . $key . " = ?";
+					$sql .= " AND " . $col . " ?";
 				}
 				
 				$i++;
@@ -93,7 +115,8 @@ trait Modelv2{
 			$sql .= " LIMIT " . self::$limit;
 		}
 		
-		return DB::conn()->query($sql, $bind)->results();
+		return $sql;
+		// return DB::conn()->query($sql, $bind)->results();
 	}
 	
 	//Query Builder End

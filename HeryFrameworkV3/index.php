@@ -9,4 +9,5 @@
 define("HFA", true);
 require_once(__DIR__ . "/Systems/init.php");
 
-(new App("MyApp Title", "myapp_code"))->run();
+(new App("MyApp Title", "myapp_code"))->run(["reload" => false]);
+

@@ -8,6 +8,10 @@ class F{
 		return urlencode($url);
 	}
 	
+	public static function version($any = ""){
+		return hash("sha256", serialize($any));
+	}
+	
 	public static function URLDecode($url, $cpecialChar = false){
 		if($specialChars == true){
 			$url = self::HTMLChars($url);

@@ -2,7 +2,7 @@
 
 class Url{
 	public static function get($type){
-		$arr = explode("/", ROUTE);
+		$arr = explode("/", rtrim(ROUTE, "/"));
 		
 		if(count($arr) > 0){
 			switch($type){
@@ -19,8 +19,13 @@ class Url{
 				break;
 				
 				case "path":
-					array_shift($arr);
+					// array_shift($arr);
 					return implode("/", $arr);
+				break;
+				
+				case "array":
+					// array_shift($arr);
+					return $arr;
 				break;
 				
 				default:
