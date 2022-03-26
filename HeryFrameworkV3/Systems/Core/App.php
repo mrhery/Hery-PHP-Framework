@@ -2,6 +2,8 @@
 class App{
 	public $name, $config = [], $route, $body, $code;
 	
+	public static $page = null;
+	
 	public function __construct($name = DEF_NAME, $code = "DEFAULT"){
 		$this->name = $name;
 		$this->code = $code;
@@ -227,8 +229,8 @@ CODE
 					include_once($file);
 					$x = new $class;
 					
-					if(isset($page)){
-						$x->setPage($page);
+					if(!is_null(self::$page)){
+						$x->setPage(self::$page);
 					}
 					
 					if(method_exists($class, $method)){
