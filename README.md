@@ -155,6 +155,35 @@ echo Url::get(2); // will return `1`
 ```
 Basically what `Url::get()` method done is converting the Url path to an array so it accessible using index number start from 0.
 
+## HPFv4 Form Control
+To make a request froma form to specific `Controller` you can do like this:
+
+1. Put this code in `action=''` form attribute:
+```
+Controller::url("TestController::index()"); // This method will generate an encrypted string to make it unreadable by human being even thanos can't read it.
+```
+
+2. Put this code before closing the form tag:
+```
+Controller::form(); // This line will automatically generate a secure token to avoid CSRF attack.
+```
+
+But before that, you need to make that your `PORTAL` constant in `configure.json` has been setup correctly or the request will be redirected to wrong URL.
+
+Full example:
+```
+<form action="<?= Controller::url("TestController::index") ?>" method="POST"> 
+	<input type="text" name="data" />
+	<button>
+		Send
+	</button>
+	
+<?php
+	Controller::form();
+?>
+</form>
+```
+
 ## End Of Documents
 This document are not well-ly finnished as it's not describe the whole structure. But this can be the basic start to using this framework. The next documents will be the `Page` class on detail, `F` class on detail, `Curl` class, `Alert`, `Packer`, `Loader` and other new upcoming features like PHP socket, AES-256 CBC Encryption and so on.
 
