@@ -2,12 +2,13 @@
 class App{
 	public $name, $config = [], $route, $body, $code;
 	
-	public static $page = null;
+	public $page;
 	
 	public function __construct($name = DEF_NAME, $code = "DEFAULT"){
 		$this->name = $name;
 		$this->code = $code;
 		$this->route = Input::get("route");		
+		$this->page = new Page();
 	}
 	
 	public function name($name = ""){
@@ -229,8 +230,8 @@ CODE
 					include_once($file);
 					$x = new $class;
 					
-					if(!is_null(self::$page)){
-						$x->setPage(self::$page);
+					if(!is_null($this->page)){
+						$x->setPage($this->page);
 					}
 					
 					if(method_exists($class, $method)){

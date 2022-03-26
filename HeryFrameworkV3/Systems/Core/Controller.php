@@ -17,6 +17,12 @@ class Controller/*  implements IController */{
 		exit();
 	}
 	
+	public function json($text){
+		header("Content-Type: application/json");
+		
+		echo json_encode($text);
+	}
+	
 	public static function url($class){
 		$path = F::Encode64(Encrypter::AESEncrypt($class, PASS, F::Decode64(IV)));
 		
@@ -27,7 +33,6 @@ class Controller/*  implements IController */{
 		 echo 
 	        "<input type='hidden' name='OWASP_CSRFTOKEN' value='" . $_SESSION["IR"] . "' />",
 	        "<input type='hidden' name='__HPF_POST_REQUEST__' value='" . F::UniqKey("POST_") . "' />"
-			
 	    ;
 	    
 	    foreach($setting as $key => $value){
