@@ -184,6 +184,108 @@ Full example:
 </form>
 ```
 
+## Start using Database
+In HPF, developer has many way to connect with your data in database and even HPF allow a developer to create their own database connection manually - procedural and object-oriented. HPF recommended using it's own database class to maintain flexibility, usability and security. 
+
+In HPF, there are 3 ways to fetch data from database.
+
+### 1. Automatic Table Class Modelling (Recommended) - Modelv2 Class
+In HPF v3, it support calling table name as a `class`. This method is recommended as it can make development easier rather than creatin class on every table in database. But make sure the table name not the same as `class` name available in all Core, Model & Classes directory. It is recommended to put the prefix on the table name like `a_users`, `a_items` etc.
+
+The `Modelv2` is a **trait**, it's a class trait which is use in the auto-generated class on table name. The `Modelv2` trait has some method can be use. (Notice: all trait are **static**, no instance required.)
+
+Modelv2 Trait
+Example table name: users (from database)
+
+1. List([$setting:array]) : array
+```
+$u = users::list();
+
+//order by
+$u = users::list(["order" => "colum_id DESC"]);
+
+//group by
+$u = users::list(["group" => "colum_group"]);
+
+//limit
+$u = users::list(["limit" => 5]);
+
+//Combining everything:
+$u = users::list([
+	"order" => "colum_id DESC",
+	"group" => "colum_group",
+	"limit" => 5
+]);
+
+print_r($u); //return as array
+```
+
+2. GetBy([$column:array]) : array
+To select specific data with simply `equals` sign `=`, 
+
+```
+$u = users::getBy([
+	"column_one"	=> "value1",
+	"column_two"	=> "value2"
+]);
+
+print_r($u); //return as array
+```
+
+3. InsertInto([$column:array]) : boolean
+To insert data, you can do:
+```
+$u = users::insertInto([
+	"column_one"	=> "value1",
+	"column_two"	=> "value2"
+]);
+
+print_r($u); //return as boolean
+```
+
+5. UpdateBy([$where:array], [$column:array]) : boolean
+To update data, 
+```
+$u = users::updateBy([
+	"where_column_1"		=> "value1",
+	"where_column_2"	=> "value2"
+],[
+	"column_3"	=> "new_value_1",
+	"column_4"	=> "new_value_2"
+]);
+
+print_r($u); //return as boolean
+```
+
+6. DeleteBy([$where:array]) : boolean
+```
+$u = users::deleteBy([
+	"column_one"	=> "value1",
+	"column_two"	=> "value2"
+]);
+
+print_r($u); //return as boolean
+```
+
+All the above method available in `Modelv2` trait class which is auto-generated and can be use with any of table name available in database. These method are SQLi Proof unless the `list()` method still has lack of security matter, it can only use internally but not recommended for user-input varible for it's setting.
+
+### 2. Manual SQL Command (available in HPFv2) - DB Class
+The `DB` class are the core SQL engine in HPF. All class modelling are depending on this class. Failing to maintain this class security can be breach the whole application. In this `DB` class, there are to way to run up the SQL command, first is data-bidned SQL Command, second no data-binded SQL Command. Here's an example:
+
+```
+// SQL without data binding
+$sql = DB::conn()->query("SELECT * FROM users");
+$sql->count(); // return number of rows
+
+$u = $sql->results(); // return an arraw of rows.
+
+//SQL with data binding
+$sql = DB::conn()->query("SELECT * FROM users WHERE id = ?", [$id]);
+$sql->count(); // return number of rows
+
+$u = $sql->results(); // return an arraw of rows.
+```
+
 ## End Of Documents
 This document are not well-ly finnished as it's not describe the whole structure. But this can be the basic start to using this framework. The next documents will be the `Page` class on detail, `F` class on detail, `Curl` class, `Alert`, `Packer`, `Loader` and other new upcoming features like PHP socket, AES-256 CBC Encryption and so on.
 
