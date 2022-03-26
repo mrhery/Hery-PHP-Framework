@@ -43,7 +43,7 @@ $this->page = new Page();
 
 The `Page` inplmentation will be explain in `Controller`.
 
-HPFv4 Database
+## HPFv4 Database
 In previous HPF version you need to always drop all the table and re-import the `.sql` file. So in this HPFv4 has a new feature which allows you to edit your database table structure without drop and re-import the `.sql` file. 
 
 This is the example how you can create you table sturucture:
