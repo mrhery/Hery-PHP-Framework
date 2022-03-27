@@ -30,14 +30,16 @@ class Controller/*  implements IController */{
 	}
 	
 	public static function form($setting = []){
-		 echo 
-	        "<input type='hidden' name='OWASP_CSRFTOKEN' value='" . $_SESSION["IR"] . "' />",
+		 $x = 
+	        "<input type='hidden' name='OWASP_CSRFTOKEN' value='" . $_SESSION["IR"] . "' />" .
 	        "<input type='hidden' name='__HPF_POST_REQUEST__' value='" . F::UniqKey("POST_") . "' />"
 	    ;
 	    
 	    foreach($setting as $key => $value){
-	        echo "<input type='hidden' name='". $key ."' value='" . $value . "' />";
+	        $x .= "<input type='hidden' name='". $key ."' value='" . $value . "' />";
 	    }
+		
+		return $x;
 	}
 }
 ?>
