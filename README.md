@@ -88,12 +88,12 @@ Route used to routing url to specific Controller/View.
 
 1. To route url `/home` to `HomeController` on `index()` method, you can do this:
 ```
-Route::set("/home")->to("HomeController::index()");
+Route::set("/home")->to("HomeController::index");
 ```
 
 2. To set multiple url `/home` & `/index` to the same controller `HomeController` on method `index()`, you can seperate the url using character `|` like this:
 ```
-Route::set("/home|index")->to("HomeController::index()");
+Route::set("/home|index")->to("HomeController::index");
 ```
 
 3. You can use nested route setting for sub url like these urls:
@@ -104,9 +104,9 @@ Route::set("/home|index")->to("HomeController::index()");
 You can do this:
 ```
 Route::make("/user")->to(function(){
-	Route::set("/")->to("UserController::index()"); 		// For first URL
-	Route::set("/add")->to("UserController::add()"); 		// For second URL
-	Route::set("/edit")->to("UserController::edit()"); 		// For third URL
+	Route::set("/")->to("UserController::index"); 		// For first URL
+	Route::set("/add")->to("UserController::add"); 		// For second URL
+	Route::set("/edit")->to("UserController::edit"); 		// For third URL
 });
 ```
 
