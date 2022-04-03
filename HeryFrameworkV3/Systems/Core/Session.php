@@ -8,6 +8,7 @@ class Session {
 	public $setting = [];
 	
 	public function __construct($name){
+		// echo $name;
 		if(isset($_SESSION[$name])){
 			$this->data = $_SESSION[$name]->data;
 			$this->name = $name;
@@ -16,11 +17,16 @@ class Session {
 			
 			return $this;
 		}else{
-			return false;
+			$this->name = $name;
+			return $this;
 		}
 	}
 	
 	public static function get($name = "", $getObject = false){
+		if(!isset($_SESSION[$name])){
+			return false;
+		}
+		
 		self::$_instance = new Session($name);
 		
 		if(self::$_instance !== false){
@@ -183,5 +189,9 @@ class Session {
 		}else{
 			return false;
 		}
+	}
+	
+	public static function destroyAll(){
+		session_destroy();
 	}
 }

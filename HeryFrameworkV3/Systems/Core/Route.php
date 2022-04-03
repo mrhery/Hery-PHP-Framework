@@ -35,12 +35,15 @@ class Route {
 			}
 		}
 		
+		// header("Content-Type: text/plain");
+		// print_r($data);
+		// die("sadasd");
+		
 		if(!$found){
 			
 			return false;
 		}else{
 			if($surl != $kf){
-				echo "";
 				if(self::all()[$kf]->param){
 					return [$kf => self::all()[$kf]];
 				}else{
@@ -66,9 +69,10 @@ class Route {
 	public static function make($url = ""){
 		if(self::$_instance == null){
 			self::$_instance = new Route();
+			self::$_instance->parentUrl = "";
 		}
 
-		self::$_instance->parentUrl .= $url . "/";
+		self::$_instance->parentUrl = $url . "";
 		self::$_instance->currentUrl = $url;
 		
 		return self::$_instance;
