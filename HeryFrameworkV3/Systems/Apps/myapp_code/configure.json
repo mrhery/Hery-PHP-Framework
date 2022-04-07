@@ -1,0 +1,19 @@
+{
+	"databases": [
+		{
+			"host": "127.0.0.1",
+			"database": "epv2",
+			"username": "root",
+			"password": ""
+		}
+	],
+	"constants": [
+		{
+			"PORTAL": 	"http://localhost/Hery-PHP-Framework-v3/HeryFrameworkV3/"
+		}
+	],
+	"miscs": [
+		"asset_loader.php"
+	],
+	"headers": []
+}
