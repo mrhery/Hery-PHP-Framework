@@ -1,4 +1,4 @@
-<?php
+ <?php
 //A journey start with a step
 
 /*
@@ -61,10 +61,17 @@ Route::set("/user/edit:param")->to(function(){
 	echo url::get(2); // followed by index number of `/user/edit/:param` (seperated by slashes) start from 0
 });
 ```
-
-
-
 */
+
+Route::make("/test")->to(function(){
+	Route::set("/a")->to(function(){
+		return "test/a";
+	});
+	
+	Route::set("/b:param")->to(function(){
+		return "test/b";
+	});
+});
 
 Route::set("/")->to("HomeController::index");
 Route::set("/phpui")->to("PHPUiController::index");
