@@ -67,6 +67,10 @@ class Page{
 		
 		$path = VIEW . $page . ".php";
 		
+		if(!is_dir(dirname($path))){
+			mkdir(dirname($path), 0777, true);
+		}
+		
 		if(is_dir(dirname($path))){
 			
 			if(!is_file($path)){

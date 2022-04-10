@@ -120,7 +120,7 @@ class Column {
 			break;
 			
 			case "double":
-				$sql .= $name . " INT(". $this->length .") ";
+				$sql .= $name . " DOUBLE ";
 			break;
 			
 			case "date":

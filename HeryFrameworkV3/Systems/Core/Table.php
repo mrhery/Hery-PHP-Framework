@@ -5,6 +5,7 @@ class Table {
 	public $name;
 	private $columns = [];
 	public $drop = false;
+	public $prefix = "";
 	
 	public function __construct($name, $conn){
 		$this->name = $name;
@@ -19,6 +20,10 @@ class Table {
 		}else{
 			return false;
 		}
+	}
+	
+	public function setPrefix($prefix = ""){
+		$this->prefix = $prefix;
 	}
 	
 	public function varchar($name, $value = "255"){
@@ -71,7 +76,7 @@ class Table {
 	
 	public function text($name){
 		$col = new Column($name, $this);
-		$col->type("timestamp");
+		$col->type("text");
 		
 		$this->columns[$name] = $col;
 		
@@ -95,12 +100,12 @@ class Table {
 					
 					if($col->exists()){
 						if($col->drop){
-							$sc .= "DROP " . $col->name . " ";
+							$sc .= "DROP " . $this->prefix . $col->name . " ";
 						}else{
-							$sc .= "CHANGE " . $col->name . " " . $col->build();
+							$sc .= "CHANGE " . $this->prefix . $col->name . " " . $this->prefix . $col->build();
 						}
 					}else{
-						$sc .= "ADD " . $col->build();
+						$sc .= "ADD " . $this->prefix . $col->build();
 					}
 				}
 				
@@ -108,19 +113,21 @@ class Table {
 			}
 		}else{
 			if(!$this->drop){
-				$sql = "CREATE TABLE " . $this->name . " (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT";
+				$sql = "CREATE TABLE " . $this->name . " (". $this->prefix ."id INT NOT NULL PRIMARY KEY AUTO_INCREMENT";
 			
 				foreach($this->columns as $col){
 					if(!empty($sql)){
 						$sql .= ", ";
 					}
 					
-					$sql .= $col->build();
+					$sql .= $this->prefix . $col->build();
 				}
 				
 				$sql .= ");";
 			}
 		}
+		
+		// echo $sql;
 		
 		return $sql;
 	}
