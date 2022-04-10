@@ -8,6 +8,7 @@
 
 define("HFA", true);
 require_once(__DIR__ . "/Systems/init.php");
+define("ASSET", __DIR__ . "/assets/");
 
 //
 //(new App("Sample Project", "sample"))->run(["reload" => false]);
