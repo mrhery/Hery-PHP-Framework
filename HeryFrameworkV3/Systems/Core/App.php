@@ -164,11 +164,20 @@ T
 		if(isset($_POST["__HPF_POST_REQUEST__"])){
 			$path = url::get("path");
 			
+			// echo $path;
+			
 			$classx = Encrypter::AESDecrypt(F::Decode64($path), PASS, F::Decode64(IV));
+			
+			if(!$classx){
+				throw new Exception("Fail reading controller name.");
+			}
 			
 			$class = explode("::", $classx)[0];
 			$method = explode("::", $classx)[1];
 			$file = APP . "Controller/" . $class . ".php";
+			
+			// echo $file;
+			// die();
 			
 			if(!file_exists($file)){
 				throw new Exception("Controller ". $class ." does not exists.");

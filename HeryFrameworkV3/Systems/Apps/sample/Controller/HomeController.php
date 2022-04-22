@@ -42,8 +42,26 @@ class HomeController extends Controller {
 	public function __construct() {}
 	
 	public function index(){
+		$name = "hery";
+		
 		$this->page->title = "Home " . APP_NAME;	// Set the page title (at the tab)
-		$this->page->loadPage("home");				// Set the path to your view file, will be auto created in your View directory
+		$this->page->loadPage("home", ["name" => $name]);				// Set the path to your view file, will be auto created in your View directory
 		$this->page->render();						// To render everything and put your page in between header and footer
+	}
+	
+	public function validateLogin(){
+		//asdasdasd/adsa
+		//asdasdasd/adsa
+		
+		$username = Input::post("username");
+		
+		
+		
+		
+		if(true){
+			$this->redirect(PORTAL . "home");
+		}else{
+			$this->redirect(PORTAL . "login");
+		}
 	}
 }

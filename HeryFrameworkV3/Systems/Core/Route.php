@@ -20,7 +20,7 @@ class Route {
 		$kf = "";
 		$found = false;
 		
-		foreach($urls as $url){			
+		foreach($urls as $url){
 			if(!empty($key)){
 				$key .= "/";
 			}
@@ -36,11 +36,24 @@ class Route {
 		}
 		
 		// header("Content-Type: text/plain");
-		// print_r($data);
-		// die("sadasd");
+		// print_r([
+			// "found"	=> $found,
+			// "kf"	=> $kf
+		// ]);		
+		// print_r($data);		
+		// print_r($data[""]);		
+		// die();
 		
 		if(!$found){
-			
+			if(isset($data[""])){
+				if($data[""]->param){
+					$found = true;
+					$kf = "";
+				}
+			}
+		}
+		
+		if(!$found){
 			return false;
 		}else{
 			if($surl != $kf){

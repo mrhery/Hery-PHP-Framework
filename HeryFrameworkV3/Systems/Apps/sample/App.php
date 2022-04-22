@@ -62,6 +62,14 @@ Route::set("/user/edit:param")->to(function(){
 });
 ```
 */
+$this->page->addTopTag('
+	<!-- This is from top tag -->
+');
+
+
+$this->page->addBottomTag('
+	<!-- This is bottom top tag -->
+');
 
 Route::make("/test")->to(function(){
 	Route::set("/a")->to(function(){
@@ -74,8 +82,4 @@ Route::make("/test")->to(function(){
 });
 
 Route::set("/")->to("HomeController::index");
-Route::set("/phpui")->to("PHPUiController::index");
 
-Route::set("/text")->to(function(){
-	return "Hi from HPF!";
-});
