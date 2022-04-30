@@ -71,6 +71,8 @@ $this->page->addBottomTag('
 	<!-- This is bottom top tag -->
 ');
 
+Route::set("/phpui")->to("PHPUiController::index");
+
 Route::make("/test")->to(function(){
 	Route::set("/a")->to(function(){
 		return "test/a";
