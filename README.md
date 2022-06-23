@@ -79,7 +79,7 @@ Or for inline:
 ```
 
 
-Remember to set you database connection setting first in `confirgure.json` file.
+Remember to set you database connection setting first in `configure.json` file.
 
 For current HPFv4 version is not support auto joining table yet. Will be updated in future.
 
