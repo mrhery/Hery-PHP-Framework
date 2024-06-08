@@ -163,8 +163,7 @@ T
 		
 		if(isset($_POST["__HPF_POST_REQUEST__"])){
 			$path = url::get("path");
-			
-			// echo $path;
+			$path = str_replace(" ", "+", $path);
 			
 			$classx = Encrypter::AESDecrypt(F::Decode64($path), PASS, F::Decode64(IV));
 			
@@ -199,7 +198,12 @@ T
 		include_once(APPS . $this->code . "/App.php");
 		
 		$data = Route::controller();
-
+		
+		// echo "\n\n============Route Controller Data===============\n\n";
+		// print_r($data);
+		// die();
+		// echo "asas";		
+		
 		if(!$data){
 			echo "Route not found";
 		}else{
