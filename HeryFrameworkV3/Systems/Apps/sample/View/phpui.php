@@ -311,6 +311,7 @@ HPHPUI::build(
 						$data[] = Htr::create([
 							"content"	=> [
 								Htd::create([
+									"style"		=> "text-align: center;",
 									"class"		=> "text-center",
 									"content"	=> $i
 								]),
